@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}
+AppSales
+{% endblock %}
+{% block head %}
+{% endblock %}
+{% block content %}
+
+{% load humanize %}
+{% load pagination_tags %}
+
+{% if user.username %}
+
+{% if resultSet %}
+
+<h3>{{ dateStr }}</h3>
+
+{% autopaginate dateSet 1 %}
+
+<table>
+  <tr>
+	<td valign="top">
+	  <table id="resultSet" cellpadding="2" cellspacing="2" border="0">
+		<tbody>
+		  <tr class="top-list-title">
+			<td class="top-list-name">Name</td>
+			<td class="top-list-col"><a href="/s/FR/?page={{ page }}">Free</a></td>
+			<td class="top-list-col"><a href="/s/PA/?page={{ page }}">Paid</a></td>
+			<td class="top-list-col"><a href="/s/IA/?page={{ page }}">InApp</a></td>
+			<td class="top-list-col"><a href="/s/UP/?page={{ page }}">Updates</a></td>
+		  </tr>
+		  {% for f in resultSet %}
+		  <tr class="{% cycle 'data_odd' 'data_even' %}">
+			<td class="top-list-name"><a href="/app/{{ f.appid }}/">{{ f.name|truncatewords:4 }}</a></td>
+			<td class="top-list-col">{{ f.FR|default:"-"|intcomma }}</td>
+			<td class="top-list-col">{{ f.PA|default:"-"|intcomma }}</td>
+			<td class="top-list-col">{{ f.IA|default:"-"|intcomma }}</td>
+			<td class="top-list-col">{{ f.UP|default:"-"|intcomma }}</td>
+		  </tr>
+		  {% endfor %}
+		  {% if summary %}
+		  <tr class="bottom-summary">
+			<td class="top-list-name">Total</td>
+			<td class="top-list-col">{{ summary.FR|intcomma }}</td>
+			<td class="top-list-col">{{ summary.PA|intcomma }}</td>
+			<td class="top-list-col">{{ summary.IA|intcomma }}</td>
+			<td class="top-list-col">{{ summary.UP|intcomma }}</td>
+		  </tr>
+		  {% endif %}
+		</tbody>
+	  </table>
+	</td>
+	<td valign="top">
+	  <table id="resultSet" cellpadding="2" cellspacing="2" border="0">
+		<tbody>
+		  <tr class="top-list-title">
+			<td class="top-list-name">Market</td>
+			<td class="top-list-col">Units</td>
+		  </tr>
+		  {% for f in countrySet %}
+		  <tr class="{% cycle 'data_odd' 'data_even' %}">
+			<td class="top-list-name">{{ f.country }}</td>
+			<td class="top-list-col">{{ f.units__sum|default:"-"|intcomma }}</td>
+		  </tr>
+		  {% endfor %}
+		</tbody>
+	  </table>
+	</td>
+  </tr>
+</table>
+
+{% paginate %}
+
+{% else %}
+<p>
+  No Data yet. <br/>
+  You can populate appsales data using './manage.py runjob populate'. </br>
+</p>
+{% endif %}
+
+{% endif %}
+{% endblock %}

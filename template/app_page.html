@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block title %}
+AppSales
+{% endblock %}
+{% block head %}
+{% endblock %}
+{% block content %}
+
+{% load humanize %}
+{% load pagination_tags %}
+
+{% if user.username %}
+
+{% if resultSet %}
+
+{% autopaginate resultSet ITEMS_PER_PAGE %}
+
+<h3>{{ appName }}</h3>
+
+<table>
+  <tr>
+	<td valign="top">
+	  <table id="resultSet" cellpadding="2" cellspacing="2" border="0">
+		<tbody>
+		  <tr class="top-list-title">
+			<td class="top-list-name"><a href="/app/{{ appid }}/s/date/?page={{ page }}">Date</a></td>
+			<td class="top-list-col"><a href="/app/{{ appid }}/s/FR/?page={{ page }}">Free</a></td>
+			<td class="top-list-col"><a href="/app/{{ appid }}/s/PA/?page={{ page }}">Paid</a></td>
+			<td class="top-list-col"><a href="/app/{{ appid }}/s/IA/?page={{ page }}">InApp</a></td>
+			<td class="top-list-col"><a href="/app/{{ appid }}/s/UP/?page={{ page }}">Updates</a></td>
+		  </tr>
+		  {% for f in resultSet %}
+		  <tr class="{% cycle 'data_odd' 'data_even' %}">
+			<td class="top-list-name">{{ f.date }}</td>
+			<td class="top-list-col">{{ f.FR|default:"-"|intcomma }}</td>
+			<td class="top-list-col">{{ f.PA|default:"-"|intcomma }}</td>
+			<td class="top-list-col">{{ f.IA|default:"-"|intcomma }}</td>
+			<td class="top-list-col">{{ f.UP|default:"-"|intcomma }}</td>
+		  </tr>
+		  {% endfor %}
+		  {% if subsummary %}
+		  <tr class="bottom-subsummary">
+			<td class="top-list-name">Sub Total</td>
+			<td class="top-list-col">{{ subsummary.FR|intcomma }}</td>
+			<td class="top-list-col">{{ subsummary.PA|intcomma }}</td>
+			<td class="top-list-col">{{ subsummary.IA|intcomma }}</td>
+			<td class="top-list-col">{{ subsummary.UP|intcomma }}</td>
+		  </tr>
+		  {% endif %}
+		  {% if summary %}
+		  <tr class="bottom-summary">
+			<td class="top-list-name">Total</td>
+			<td class="top-list-col">{{ summary.FR|intcomma }}</td>
+			<td class="top-list-col">{{ summary.PA|intcomma }}</td>
+			<td class="top-list-col">{{ summary.IA|intcomma }}</td>
+			<td class="top-list-col">{{ summary.UP|intcomma }}</td>
+		  </tr>
+		  {% endif %}
+		</tbody>
+	  </table>
+	</td>
+	<td valign="top">
+	  <table id="resultSet" cellpadding="2" cellspacing="2" border="0">
+		<tbody>
+		  <tr class="top-list-title">
+			<td class="top-list-name">Market</td>
+			<td class="top-list-col">Units</td>
+		  </tr>
+		  {% for f in countrySet %}
+		  <tr class="{% cycle 'data_odd' 'data_even' %}">
+			<td class="top-list-name">{{ f.country }}</td>
+			<td class="top-list-col">{{ f.units__sum|default:"-"|intcomma }}</td>
+		  </tr>
+		  {% endfor %}
+		</tbody>
+	  </table>
+	</td>
+  </tr>
+</table>
+
+{% paginate %}
+
+{% else %}
+<p>
+  There is no data.
+  <br/>
+  To populate the data in system, use sales.cron.populate() routine.
+</p>
+{% endif %}
+
+{% endif %}
+{% endblock %}

@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+               "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+lang="en" xml:lang="en">
+<head>
+<title>index</title>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+<meta name="generator" content="Org-mode"/>
+<meta name="generated" content="2010-11-16 23:39:07 KST"/>
+<meta name="author" content="Jaemok Jeong"/>
+<meta name="description" content=""/>
+<meta name="keywords" content=""/>
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  html { font-family: Times, serif; font-size: 12pt; }
+  .title  { text-align: center; }
+  .todo   { color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #add8e6; font-weight:normal }
+  .target { }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  p.verse { margin-left: 3% }
+  pre {
+	border: 1pt solid #AEBDCC;
+	background-color: #F3F5F7;
+	padding: 5pt;
+	font-family: courier, monospace;
+        font-size: 90%;
+        overflow:auto;
+  }
+  table { border-collapse: collapse; }
+  td, th { vertical-align: top; }
+  dt { font-weight: bold; }
+  div.figure { padding: 0.5em; }
+  div.figure p { text-align: center; }
+  .linenr { font-size:smaller }
+  .code-highlighted {background-color:#ffff00;}
+  .org-info-js_info-navigation { border-style:none; }
+  #org-info-js_console-label { font-size:10px; font-weight:bold;
+                               white-space:nowrap; }
+  .org-info-js_search-highlight {background-color:#ffff00; color:#000000;
+                                 font-weight:bold; }
+  /*]]>*/-->
+</style>
+
+</head>
+<body>
+<div id="content">
+
+<h1 class="title">index</h1>
+
+
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1 Django-appsales</a>
+<ul>
+<li><a href="#sec-1.1">1.1 Installation </a>
+<ul>
+<li><a href="#sec-1.1.1">1.1.1 사전 필요 사항 </a></li>
+<li><a href="#sec-1.1.2">1.1.2 Downloads </a></li>
+<li><a href="#sec-1.1.3">1.1.3 설치 </a></li>
+</ul>
+</li>
+<li><a href="#sec-1.2">1.2 자동화 </a></li>
+<li><a href="#sec-1.3">1.3 Screenshots </a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> Django-appsales &nbsp;&nbsp;&nbsp;<span class="tag"><span class="appsales">appsales</span>&nbsp;<span class="python">python</span>&nbsp;<span class="django">django</span></span></h2>
+<div class="outline-text-2" id="text-1">
+
+
+<p>
+django-appsales는 <a href="http://itunesconnect.apple.com">iTunesConnects</a>의 application sales report를 다운로드 받아
+DB에 넣어서 여러 view로 sales report를 보기 위한 프로그램입니다. 
+</p>
+
+</div>
+
+<div id="outline-container-1.1" class="outline-3">
+<h3 id="sec-1.1"><span class="section-number-3">1.1</span> Installation </h3>
+<div class="outline-text-3" id="text-1.1">
+
+
+
+</div>
+
+<div id="outline-container-1.1.1" class="outline-4">
+<h4 id="sec-1.1.1"><span class="section-number-4">1.1.1</span> 사전 필요 사항 </h4>
+<div class="outline-text-4" id="text-1.1.1">
+
+
+<p>
+이 프로그램을 구동하기 위해서는 다음과 같은 프로그램이 필요합니다.
+</p>
+<ul>
+<li>
+django 1.2.3 
+</li>
+<li>
+django-extensions
+</li>
+<li>
+django-pagination
+
+</li>
+</ul>
+
+<p>Python package가 인스톨되어 있으면 
+<code>easy_install</code> 명령을 이용하여 시스템에 필요 package를 인스톨할 수 있습니다.
+</p>
+<pre class="example">
+sudo easy_install django django-extensions django-pagination
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-1.1.2" class="outline-4">
+<h4 id="sec-1.1.2"><span class="section-number-4">1.1.2</span> Downloads </h4>
+<div class="outline-text-4" id="text-1.1.2">
+
+
+<pre class="example">
+git clone git://github.com/django-appsales appsales
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-1.1.3" class="outline-4">
+<h4 id="sec-1.1.3"><span class="section-number-4">1.1.3</span> 설치 </h4>
+<div class="outline-text-4" id="text-1.1.3">
+
+
+<ul>
+<li id="sec-1.1.3.1">설정 <br/>
+
+<p>
+<code>settings.py</code>에서 필요한 설정을 조정합니다. 
+</p>
+<p>
+자동화를 위해서 <code>APPSTORE_ID</code>와 <code>APPSTORE_PW</code> 항목을 설정합니다.
+</p>
+<pre class="example">
+# Local settings
+##############################
+# iTunes Store AppStore ID
+APPSTORE_ID = ''
+# iTunes Store AppStore PW
+APPSTORE_PW = ''
+</pre>
+
+
+</li>
+<li id="sec-1.1.3.2">기본설치 <br/>
+
+<p>
+다운로드 받은 appsales directory에서 <code>./manage.py syncdb</code>를 입력합니다.
+프로그램 수행 중간에 admin 계정 설정을 묻는 항목이 나옵니다. 
+</p>
+<pre class="example">
+jmjeong-ui-MacBook-Pro:appsales jmjeong$ ./manage.py syncdb
+Creating table auth_permission
+Creating table auth_group_permissions
+Creating table auth_group
+Creating table auth_user_user_permissions
+Creating table auth_user_groups
+Creating table auth_user
+Creating table auth_message
+Creating table django_content_type
+Creating table django_session
+Creating table django_site
+Creating table sales_app
+Creating table sales_date
+Creating table sales_country
+Creating table sales_sales
+Creating table django_admin_log
+
+You just installed Django's auth system, 
+          which means you don't have any superusers defined.
+Would you like to create one now? (yes/no): yes
+Username (Leave blank to use 'jmjeong'): 
+E-mail address: jmjeong@gmail.com
+Password: 
+Password (again): 
+Superuser created successfully.
+Installing index for auth.Permission model
+Installing index for auth.Group_permissions model
+Installing index for auth.User_user_permissions model
+Installing index for auth.User_groups model
+Installing index for auth.Message model
+Installing index for sales.Sales model
+Installing index for admin.LogEntry model
+Installing json fixture 'initial_data' from absolute path.
+Installed 245 object(s) from 1 fixture(s)
+jmjeong-ui-MacBook-Pro:appsales jmjeong$ 
+</pre>
+
+
+</li>
+<li id="sec-1.1.3.3">서버구동 <br/>
+
+<p>
+<code>django</code> 기본 서버를 이용하여 web server를 구동할 수 있습니다. 
+</p>
+<pre class="example">
+jmjeong-ui-MacBook-Pro:appsales jmjeong$ ./manage.py runserver
+Validating models...
+0 errors found
+
+Django version 1.2.3, using settings 'appsales.settings'
+Development server is running at http://127.0.0.1:8000/
+Quit the server with CONTROL-C.
+</pre>
+
+
+<p>
+시스템 서버 구동은 <a href="http://docs.djangoproject.com/en/dev/howto/deployment/">Django deployment</a>를 참고하십시오.
+</p>
+</li>
+<li id="sec-1.1.3.4">웹브라우저에서 접속 <br/>
+
+<p>
+<code>http://localhost:8000</code> 으로 접속하여, 앞서 만든 계정으로 login하면 아래와 같은 
+화면을 볼 수 있습니다.
+</p>
+<p>
+<img src="docs/firsttime.png"  alt="docs/firsttime.png" />
+</p>
+</li>
+<li id="sec-1.1.3.5">데이타 입력 <br/>
+
+<p>
+<code>./manage.py runjob populate</code>를 이용해서 데이타를 입력합니다.
+DB에 import되는 data는 <a href="http://itunesconnect.apple.com">iTunesConnect</a>에서 다운로드 받은 Sales data입니다. 
+</p>
+<p>
+<img src="docs/sales-rawdata-directory.png"  alt="docs/sales-rawdata-directory.png" />
+</p>
+<p>
+<code>settings.py</code>에 정의된 <code>DATA_DIR</code>에 위치한 파일 중에서 정의된 Prefix를
+가진 파일을 읽어 들입니다.
+</p>
+<pre class="example">
+jmjeong-ui-MacBook-Pro:appsales jmjeong$ ./manage.py runjob populate
+Populate data files in [/Users/jmjeong/django/appsales/sales-rawdata]
+[2010/11/08] is now processing...
+</pre>
+
+
+<p>
+<code>DATA_DIR</code>에 있는 파일 중에서 <code>S_D_mmddyyyy.txt</code>이나 <code>S_D_mm-dd-yyyy.txt</code>와 같은 형태의 파일만 읽어서
+처리합니다. 이미 처리된 파일은 중복처리가 되지 않기 때문에 이 명령은 여러번 사용해도 무관합니다.
+</p>
+</li>
+</ul>
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-1.2" class="outline-3">
+<h3 id="sec-1.2"><span class="section-number-3">1.2</span> 자동화 </h3>
+<div class="outline-text-3" id="text-1.2">
+
+
+<p>
+<a href="http://appdailysales.googlecode.com/">AppDailySales</a>는 iTunes Connect web site로부터 daily sales data를 자동으로 다운로드 받는
+python script입니다. <code>./utils/appdailysales.py</code>는 <a href="http://appdailysales.googlecode.com/">AppDailySales</a>에 아래와 같은 수정을 하였습니다.
+</p>
+<ul>
+<li>
+이미 다운로드 받은 report는 받지 않기
+</li>
+<li>
+Option과는 상관없이 현재 iTunes Connect에서 모든 daily sales report를 받기
+
+</li>
+</ul>
+
+<p><code>./manage.py runjob download</code>를 하면 <code>settings.py</code>에 설정된 Id, Pw를 이용하여
+sales data를 받아서 <code>DATA_DIR</code>에 저장을 합니다.
+</p>
+<pre class="example">
+jmjeong-ui-MacBook-Pro:appsales jmjeong$ ./manage.py runjob download
+Report file downloaded: 
+['/Users/jmjeong/django/appsales/sales-rawdata/S_D_11-09-2010.txt'] 
+</pre>
+
+
+<ul>
+<li id="sec-1.2.1">Crontab에 등록 <br/>
+
+<p>
+<code>cron.sh</code> script는 iTunesConnect site로부터 sales data를 download하여
+DB에 저장하는 script입니다.  <code>crontab -e</code>를 이용하여 system의 crontab에
+등록합니다.
+</p>
+<pre class="example">
+@daily /path/to/cron.sh
+</pre>
+
+
+</li>
+</ul>
+</div>
+
+</div>
+
+<div id="outline-container-1.3" class="outline-3">
+<h3 id="sec-1.3"><span class="section-number-3">1.3</span> Screenshots </h3>
+<div class="outline-text-3" id="text-1.3">
+
+
+<ul>
+<li>
+메인 페이지
+
+<p>
+<img src="docs/mainpage.png"  alt="docs/mainpage.png" />
+</p>
+</li>
+<li>
+항목별로 Sort
+
+<p>
+<img src="docs/mainpage-sort.png"  alt="docs/mainpage-sort.png" />
+</p>
+</li>
+<li>
+Application별 통계
+
+<p>
+<img src="docs/app-page.png"  alt="docs/app-page.png" />
+</p>
+
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="postamble">
+<p class="author"> Author: Jaemok Jeong
+<a href="mailto:jmjeong@gmail.com">&lt;jmjeong@gmail.com&gt;</a>
+</p>
+<p class="date"> Date: 2010-11-16 23:39:07 KST</p>
+<p class="creator">HTML generated by org-mode 6.33x in emacs 23</p>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,10 @@
+.DS_Store
+*.pyc
+*~
+/local_settings-jmjeong.py
+/sales-rawdata.bak
+/sales.sqlite3-journal
+local_settings.py
+raw-data
+sales-rawdata
+#*#

@@ -1,0 +1,21 @@
+<html>
+ <head>
+   <title>{% block title %}{% endblock %}</title>
+   <link rel="stylesheet" href="/site_media/style.css" type="text/css"/>
+</head>
+<body>
+  <div id="nav">
+	<a href="/">Home</a> 
+	{% if user.is_staff %}
+	| <a href="/admin/">Admin</a>  
+	{% endif %}
+	{% if user.is_authenticated %}
+	| {{ user.username }}(<a href="/logout">Logout</a>)
+	{% else %}
+	| <a href="/login/">Login</a>  
+	{% endif %}
+  </div>
+<h1>{% block head %}{% endblock %}</h1>
+<p>{% block content %}{% endblock %}</p>
+</body>
+</html>
