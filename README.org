@@ -24,7 +24,7 @@ Python package가 인스톨되어 있으면
 
 *** Downloads
 
-: git clone git://github.com/django-appsales appsales
+: git clone git://github.com/jmjeong/django-appsales.git appsales
 
 *** 설치
 
@@ -32,7 +32,8 @@ Python package가 인스톨되어 있으면
 
 =settings.py=에서 필요한 설정을 조정합니다. 
 
-자동화를 위해서 =APPSTORE_ID=와 =APPSTORE_PW= 항목을 설정합니다.
+자동화를 위해서 =APPSTORE_ID=와 
+=APPSTORE_PW= 항목을 설정합니다.
 
 : # Local settings
 : ##############################
