@@ -5,7 +5,8 @@
   :END:
 
 django-appsales는 [[http://itunesconnect.apple.com][iTunesConnects]]의 application sales report를 다운로드 받아
-DB에 넣어서 여러 view로 sales report를 보기 위한 프로그램입니다. 
+DB에 넣어서 여러 view로 sales report를 보기 위한 프로그램입니다. 프로그램의
+최신 소스는 [[https://github.com/jmjeong/django-appsales][Github]]에 있습니다.
 
 ** Installation
 
