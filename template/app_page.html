@@ -2,21 +2,19 @@
 {% block title %}
 AppSales
 {% endblock %}
-{% block head %}
+{% block chart-data %}{{ request.path }}chart.json/?page={{ page }}{% endblock %}
+{% block h1 %}
 {% endblock %}
 {% block content %}
-
 {% load humanize %}
 {% load pagination_tags %}
-
 {% if user.username %}
-
 {% if resultSet %}
-
 {% autopaginate resultSet ITEMS_PER_PAGE %}
-
 <h3>{{ appName }}</h3>
 
+{% paginate %}
+<div id="my_chart"></div>
 <table>
   <tr>
 	<td valign="top">
@@ -31,7 +29,7 @@ AppSales
 		  </tr>
 		  {% for f in resultSet %}
 		  <tr class="{% cycle 'data_odd' 'data_even' %}">
-			<td class="top-list-name">{{ f.date }}</td>
+			<td class="top-list-name">{{ f.dateStr }}</td>
 			<td class="top-list-col">{{ f.FR|default:"-"|intcomma }}</td>
 			<td class="top-list-col">{{ f.PA|default:"-"|intcomma }}</td>
 			<td class="top-list-col">{{ f.IA|default:"-"|intcomma }}</td>
@@ -77,8 +75,6 @@ AppSales
 	</td>
   </tr>
 </table>
-
-{% paginate %}
 
 {% else %}
 <p>

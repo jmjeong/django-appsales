@@ -2,6 +2,13 @@
  <head>
    <title>{% block title %}{% endblock %}</title>
    <link rel="stylesheet" href="/site_media/style.css" type="text/css"/>
+   <script type="text/javascript" src="/site_media/swfobject.js"></script>
+   <script type="text/javascript">
+	 swfobject.embedSWF("/site_media/open-flash-chart.swf", "my_chart",
+	 "720", "300", "9.0.0", "/site_media/expressInstall.swf",
+	 {"data-file":"{% block chart-data %}{% endblock %}"}
+	 );
+   </script>
 </head>
 <body>
   <div id="nav">
@@ -15,7 +22,7 @@
 	| <a href="/login/">Login</a>  
 	{% endif %}
   </div>
-<h1>{% block head %}{% endblock %}</h1>
+<h1>{% block h1 %}{% endblock %}</h1>
 <p>{% block content %}{% endblock %}</p>
 </body>
 </html>

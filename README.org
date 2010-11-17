@@ -18,10 +18,12 @@ DB에 넣어서 여러 view로 sales report를 보기 위한 프로그램입니�
 - django-extensions
 - django-pagination
 
+- pyofc2 (for chart)
+
 Python package가 인스톨되어 있으면 
 =easy_install= 명령을 이용하여 시스템에 필요 package를 인스톨할 수 있습니다.
 
-: sudo easy_install django django-extensions django-pagination
+: sudo easy_install django django-extensions django-pagination pyofc2
 
 *** Downloads
 

@@ -24,14 +24,13 @@ from sales.models import *
 import datetime
 from itertools import groupby
 
-@csrf_protect
-def main_page(request):
-    return main_sort_page(request, 'name')
-
 @login_required
-def main_sort_page(request, sort):
+def main_page(request, sort):
 
     dateSet = Date.objects.all().order_by('-date')
+    
+    if not sort:
+        sort = 'name'
     
     try:
         page = int(request.GET['page'])
@@ -91,12 +90,47 @@ def main_sort_page(request, sort):
     return render_to_response('main_page.html', var)
 
 
-def app_page(request, appid):
-    return app_sort_page(request, appid, 'date')
+def chart_data(appName, sort, dataSet, subsummary):
+    """Generate Chart data"""
+    
+    from pyofc2  import *
+    
+    dataSet = list(dataSet)
+    
+    b1 = line_hollow()
+
+    if sort == 'date':
+        dataSet.reverse()
+
+        # if 'sort' is date, use the interesing data
+        if subsummary['FR'] > subsummary['PA']:
+            display = 'FR'
+        else:
+            display = 'PA'
+        b1.values = [f[display] if display in f else 0 for f in dataSet]
+        b1.text = display
+    else:
+        b1.values = [f[sort] if sort in f else 0 for f in dataSet]
+        b1.text = sort
+    
+    chart = open_flash_chart()
+    chart.title = title(text=appName)
+    chart.add_element(b1)
+
+    x = x_axis()
+    lbl = labels(labels = [f['date'].strftime('%m/%d') for f in dataSet])
+    x.labels = lbl
+    chart.x_axis = x
+    
+    y = y_axis()
+    y.min, y.max, y.steps = 0, max(max(b1.values)*1.1,1), int(max(b1.values)/5)
+    chart.y_axis = y
+    
+    return chart.render()
 
 @login_required
-def app_sort_page(request, appid, sort='date'):
-    
+def app_page(request, appid, sort, json):
+
     try:
         appName = App.objects.get(pk=appid).name
     except:
@@ -104,6 +138,9 @@ def app_sort_page(request, appid, sort='date'):
 
     ITEMS_PER_PAGE = 14
     
+    if not sort:
+        sort = 'date'
+
     sales = Sales.objects.filter(app=appid).values('date','category').annotate(Sum('units'))
     
     resultSet = []
@@ -112,27 +149,16 @@ def app_sort_page(request, appid, sort='date'):
     for date, fs in groupby(sorted(sales, key=lambda r:r['date'], reverse=True),
                            key=lambda r:r['date']):
         result = {}
-        result['date'] = date.strftime('%Y/%m/%d %a')
+        result['date'] = date
+        result['dateStr'] = date.strftime('%Y/%m/%d %a')
 
         for f in fs:
             result[f['category']] = f['units__sum']
 
         resultSet.append(result)
 
-    # Sort resultSet by Sort category
-    resultSet.sort(reverse=True,key=lambda r:r.has_key(sort) and r[sort] or 0)
-
-    if resultSet:
-        if sort == 'date':
-            cs = Sales.objects.filter(app=appid).values('country').annotate(Sum('units')).order_by('-units__sum')[:ITEMS_PER_PAGE]
-        else:
-            cs = Sales.objects.filter(app=appid, category=sort).values('country').annotate(Sum('units')).order_by('-units__sum')[:ITEMS_PER_PAGE]
-            
-        # Convert country pk into country name
-        countrySet = map(
-            lambda k: {'country':Country.objects.get(pk=k['country']).name, 'units__sum': k['units__sum']},
-            cs)
-
+    # Sort resultSet by category
+    resultSet.sort(key=lambda r:r.has_key(sort) and r[sort] or 0, reverse=True)
 
     # Paginator
     try:
@@ -151,6 +177,21 @@ def app_sort_page(request, appid, sort='date'):
     # generate statistic data
     summary = generate_summary(resultSet)
     subsummary = generate_summary(subResultSet.object_list)
+
+    if json == 'chart.json':
+        return HttpResponse(chart_data(appName, sort, subResultSet.object_list, subsummary))
+
+    # calculate country result data
+    if resultSet:
+        if sort == 'date':
+            cs = Sales.objects.filter(app=appid).values('country').annotate(Sum('units')).order_by('-units__sum')[:ITEMS_PER_PAGE]
+        else:
+            cs = Sales.objects.filter(app=appid, category=sort).values('country').annotate(Sum('units')).order_by('-units__sum')[:ITEMS_PER_PAGE]
+            
+        # Convert country pk into country name
+        countrySet = map(
+            lambda k: {'country':Country.objects.get(pk=k['country']).name, 'units__sum': k['units__sum']},
+            cs)
 
     var = RequestContext(request, {
         'appName': appName,

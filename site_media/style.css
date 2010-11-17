@@ -45,14 +45,8 @@ input {
 	text-align : right;
 }
 
-/* .paginator { */
-/* 	font-size: 11px; */
-/* } */
-
 .pagination {
-    padding-top: 20px;
-    padding-left: 5px;
-    padding-right: 5px;
+	padding: 5px;
 	font-size : 100%;
 }
 .pagination .page a {

@@ -20,12 +20,9 @@ urlpatterns = patterns(
     # Uncomment the next line to enable the admin:
     (r'^admin/', include(admin.site.urls)),
 
-
     # main page
-    (r'^$', main_page),
-    (r'^s/(\w+)/$', main_sort_page),
-    (r'^app/(\d+)/$', app_page),
-    (r'^app/(\d+)/s/(\w+)/$', app_sort_page),
+    (r'^(s/(?P<sort>\w+)/)?$', main_page),
+    (r'^app/(?P<appid>\d+)(/s/(?P<sort>\w+))?(/(?P<json>chart\.json))?/$', app_page),
 
     # session
     (r'^login/$', 'django.contrib.auth.views.login'),
