@@ -218,6 +218,7 @@ def total_page(request, sort):
     for app, fs in groupby(sorted(sales, key=lambda r:r['app'], reverse=True),
                            key=lambda r:r['app']):
         result = {}
+        result['appid'] = app
         result['appname'] = App.objects.get(id=app).name
 
         for f in fs:
