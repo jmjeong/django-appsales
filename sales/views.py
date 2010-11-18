@@ -206,6 +206,37 @@ def app_page(request, appid, sort, json):
         })
     return render_to_response('app_page.html', var)
 
+@login_required
+def total_page(request, sort):
+    
+    if not sort:
+        sort = 'appname'
+
+    sales = Sales.objects.values('app', 'category').annotate(Sum('units'))
+    resultSet = []
+    
+    for app, fs in groupby(sorted(sales, key=lambda r:r['app'], reverse=True),
+                           key=lambda r:r['app']):
+        result = {}
+        result['appname'] = App.objects.get(id=app).name
+
+        for f in fs:
+            result[f['category']] = f['units__sum']
+
+        resultSet.append(result)
+
+    # Sort resultSet by category
+    resultSet.sort(key=lambda r:r.has_key(sort) and r[sort] or 0, reverse=True)
+
+    # generate statistic data
+    summary = generate_summary(resultSet)
+
+    var = RequestContext(request, {
+        'resultSet' : resultSet,
+        'summary':summary,
+        })
+    return render_to_response('total_page.html', var)
+
 def logout_page(request):
     logout(request)
     return HttpResponseRedirect('/')
