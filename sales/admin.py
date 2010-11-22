@@ -24,4 +24,5 @@ class DateAdmin(admin.ModelAdmin):
 
 admin.site.register(Sales, SalesAdmin)
 admin.site.register(Country)
+admin.site.register(App)
 admin.site.register(Date, DateAdmin)

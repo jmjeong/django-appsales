@@ -11,6 +11,7 @@ import datetime
 # Create your models here.
 
 class App(models.Model):
+    appleid = models.CharField(max_length=18)
     sku = models.CharField(max_length=100)
     name = models.CharField(max_length=255)
 
@@ -18,7 +19,7 @@ class App(models.Model):
         return self.name
 
 class Date(models.Model):
-    date = models.DateTimeField(unique=True)
+    date = models.DateField(unique=True)
     populated = models.BooleanField()
     created = models.DateTimeField(auto_now=True)
 
@@ -31,6 +32,20 @@ class Country(models.Model):
 
     def __unicode__(self):
         return self.code
+
+class Review(models.Model):
+    app = models.ForeignKey(App)
+
+    country = models.ForeignKey(Country)
+    
+    title = models.CharField(max_length=256)
+    stars = models.IntegerField()
+    reviewer = models.CharField(max_length=256)
+    version = models.CharField(max_length=100)
+    date = models.DateTimeField()
+    
+    content = models.TextField()
+    new = models.BooleanField()
 
 class Sales(models.Model):
     TYPE_CHOICES = (

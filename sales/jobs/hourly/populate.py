@@ -74,6 +74,7 @@ class Job(HourlyJob):
                 else:
                     raise ValueError
 
+
                 data['proceeds'] = float(proceeds)
 
                 country_code = row['Country Code'].strip()
@@ -103,6 +104,13 @@ class Job(HourlyJob):
                     raise ValueError
                 data['sku'] = sku
 
+                if 'Apple Identifier' in row:
+                    appleid = row['Apple Identifier']
+                else:
+                    raise ValueError
+
+                data['appleid'] = appleid
+
                 data_set.append(data)
 
             for data in data_set:
@@ -110,6 +118,7 @@ class Job(HourlyJob):
                 app_id, created = App.objects.get_or_create(sku=data['sku'])
                 if created:
                     app_id.name = data['appname']
+                    app_id.appleid = data['appleid']
                     app_id.save()
 
                 sales = Sales()
