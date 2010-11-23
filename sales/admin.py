@@ -5,13 +5,13 @@
 #
 # [2010/11/05]
 
-from sales.models import Sales, Date, App, Country
+from sales.models import Sales, Date, App, Country, Review
 from django.contrib import admin
 
 import datetime
 
 class SalesAdmin(admin.ModelAdmin):
-    list_display = ('app', 'print_date', 'units', 'country', 'proceeds', 'currency',  'category')
+    list_display = ('app', 'date', 'units', 'country', 'proceeds', 'currency',  'category')
     list_filter = ('app', 'category')
     date_hierarchy = 'date'
     
@@ -22,7 +22,15 @@ class DateAdmin(admin.ModelAdmin):
     ordering = ('-date',)
     date_hierarchy = 'date'
 
+class ReviewAdmin(admin.ModelAdmin):
+    list_display = ('app', 'country', 'stars',  'reviewer', 'version','title', 'content')
+    ordering = ('-version', '-date')
+    list_filter = ('app', )
+    
+
 admin.site.register(Sales, SalesAdmin)
+admin.site.register(Review, ReviewAdmin)
+admin.site.register(Date, DateAdmin)
 admin.site.register(Country)
 admin.site.register(App)
-admin.site.register(Date, DateAdmin)
+

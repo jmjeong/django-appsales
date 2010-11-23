@@ -61,12 +61,13 @@ AppSales
 	  <table id="resultSet" cellpadding="2" cellspacing="2" border="0">
 		<tbody>
 		  <tr class="top-list-title">
-			<td class="top-list-name">Market</td>
+			<td class="top-list-name" colspan="2">Market</td>
 			<td class="top-list-col">Units</td>
 		  </tr>
 		  {% for f in countrySet %}
 		  <tr class="{% cycle 'data_odd' 'data_even' %}">
-			<td class="top-list-name">{{ f.country }}</td>
+			<td class="top-icon"><img src="/site_media/ImageFlags/{{ f.code }}.png" height="24px"/></td>
+			<td class="top-list-name">{{ f.name }}</td>
 			<td class="top-list-col">{{ f.units__sum|default:"-"|intcomma }}</td>
 		  </tr>
 		  {% endfor %}

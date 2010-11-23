@@ -42,10 +42,10 @@ class Review(models.Model):
     stars = models.IntegerField()
     reviewer = models.CharField(max_length=256)
     version = models.CharField(max_length=100)
-    date = models.DateTimeField()
-    
+    date = models.DateField()       
     content = models.TextField()
-    new = models.BooleanField()
+    
+    created = models.DateTimeField(auto_now=True)
 
 class Sales(models.Model):
     TYPE_CHOICES = (
@@ -81,7 +81,7 @@ class Sales(models.Model):
         ('USD', 'United States Dollar'))
     
     app = models.ForeignKey(App)
-    date = models.DateTimeField()
+    date = models.DateField()
     units = models.IntegerField()
     proceeds = models.FloatField()
     country = models.ForeignKey(Country)
@@ -90,11 +90,6 @@ class Sales(models.Model):
     ptype = models.CharField(max_length=3, choices=TYPE_CHOICES)
     category = models.CharField(max_length=2, choices=TYPE_CALC_CHOICES)
     
-    def print_date(self):
-        return self.date.date()
-    
-    print_date.short_description = "Date"
-
     def calc_category(self, ptype, price):
         if ptype == '1' or ptype == '1F' or ptype == '1T':
             if price == 0:

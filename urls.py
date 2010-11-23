@@ -24,6 +24,7 @@ urlpatterns = patterns(
     (r'^(s/(?P<sort>\w+)/)?$', main_page),
     (r'^app/(?P<appid>\d+)(/s/(?P<sort>\w+))?(/(?P<json>chart\.json))?/$', app_page),
     (r'^total(/s/(?P<sort>\w+))?/$', total_page),
+    (r'^review(/(?P<appid>\d+))?/$', review_page),
 
     # session
     (r'^login/$', 'django.contrib.auth.views.login'),

@@ -73,7 +73,9 @@ def main_page(request, sort):
             
         # Convert country pk into country name
         countrySet = map(
-            lambda k: {'country':Country.objects.get(pk=k['country']).name, 'units__sum': k['units__sum']},
+            lambda k: {'name':Country.objects.get(pk=k['country']).name,
+                       'code':Country.objects.get(pk=k['country']).code.lower(),
+                       'units__sum': k['units__sum']},
             cs)
         dateStr = date.date.strftime('%Y/%m/%d %a')
     else:
@@ -191,7 +193,9 @@ def app_page(request, appid, sort, json):
             
         # Convert country pk into country name
         countrySet = map(
-            lambda k: {'country':Country.objects.get(pk=k['country']).name, 'units__sum': k['units__sum']},
+            lambda k: {'name':Country.objects.get(pk=k['country']).name,
+                       'code':Country.objects.get(pk=k['country']).code.lower(),
+                       'units__sum': k['units__sum']},
             cs)
 
     var = RequestContext(request, {

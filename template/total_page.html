@@ -26,7 +26,7 @@ AppSales
 		  </tr>
 		  {% for f in resultSet %}
 		  <tr class="{% cycle 'data_odd' 'data_even' %}">
-			<td class="top-icon"><img src="{{ f.icon }}" height="25px"/></td>
+			<td class="top-icon"><img src="{{ f.icon }}" height="24px"/></td>
 			<td class="top-list-name"><a href="/app/{{ f.appid }}/">{{ f.appname|truncatewords:4  }}</a></td>
 			<td class="top-list-col">{{ f.FR|default:"-"|intcomma }}</td>
 			<td class="top-list-col">{{ f.PA|default:"-"|intcomma }}</td>
