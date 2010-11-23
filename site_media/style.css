@@ -6,6 +6,10 @@ input {
 	display: block;
 }
 
+.small {
+	font-size:90%;
+}
+
 .top-list-title
 {
 	background: lightblue;

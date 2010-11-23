@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}
+AppSales
+{% endblock %}
+{% block chart-data %}{% endblock %}
+{% block h1 %}
+{% endblock %}
+{% block content %}
+{% load humanize %}
+{% load pagination_tags %}
+{% if user.username %}
+{% autopaginate resultSet 50 %}
+<h3>{{ appName }}</h3>
+<img src="{{ icon }}"/>
+
+<p>
+{% paginate %}
+<p>
+
+{% if resultSet %}
+  
+{% for f in resultSet %}
+<table>
+<tr>
+<td>
+<img src="/site_media/ImageFlags/{{ f.country.code }}.png"/>
+<b>{{ f.title }}</b> {{ f.stars }} star
+</td>
+</tr>
+<tr><td>
+<div class="small">by {{ f.reviewer }} - Version {{ f.version }} - {{ f.date }}</div>
+</td></tr>
+<tr><td>
+<pre id="content" width="40px">{% autoescape off %}{{ f.content }}{% endautoescape %}</pre>
+</td></tr>
+</table>
+
+{% endfor %}
+
+<p>
+{% paginate %}
+<p>
+
+{% else %}
+<p>
+  There is no Review data yet.
+  <br/>
+</p>
+{% endif %}
+
+{% endif %}
+{% endblock %}

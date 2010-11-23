@@ -24,6 +24,8 @@ from sales.models import *
 import datetime
 from itertools import groupby
 
+ITEMS_PER_PAGE = 14
+
 @login_required
 def main_page(request, sort):
 
@@ -92,7 +94,6 @@ def main_page(request, sort):
         })
     return render_to_response('main_page.html', var)
 
-
 def chart_data(appName, sort, dataSet, subsummary):
     """Generate Chart data"""
     
@@ -139,8 +140,6 @@ def app_page(request, appid, sort, json):
     except:
         raise Http404
 
-    ITEMS_PER_PAGE = 14
-    
     if not sort:
         sort = 'date'
 
@@ -245,11 +244,53 @@ def total_page(request, sort):
         })
     return render_to_response('total_page.html', var)
 
+
+def review_page_detail(request, appid):
+
+    try:
+        appid = App.objects.get(pk=appid)
+    except:
+        raise Http404
+    
+    reviews = Review.objects.filter(app=appid).order_by('-date')
+
+    icon = "http://images.appshopper.com/icons/%s/%s.png" % (appid.appleid[:3], appid.appleid[3:])
+
+    var = RequestContext(request, {
+        'resultSet' : reviews,
+        'appName' : appid.name,
+        'icon' : icon,
+        
+        'ITEMS_PER_PAGE' : ITEMS_PER_PAGE,
+        })
+
+    return render_to_response('review_page_detail.html', var)
+    
+    
+
 @login_required
 def review_page(request, appid):
+
+    resultSet = []
+
+    if appid:
+        return review_page_detail(request, appid)
+    
+    apps = App.objects.all()
+    for a in apps:
+        result = {}
+        result['appname'] = a.name
+        result['appid'] = a.id
+        result['icon'] = "http://images.appshopper.com/icons/%s/%s.png" % (a.appleid[:3], a.appleid[3:])
+        result['total'] = Review.objects.filter(app = a).count()
+        result['current'] = Review.objects.filter(app = a).count()
+        
+        resultSet.append(result)
+
+    resultSet.sort(key=lambda r: r['appname'], reverse=True)
+    
     var = RequestContext(request, {
         'resultSet' : resultSet,
-        'summary':summary,
         })
 
     return render_to_response('review_page.html', var)
