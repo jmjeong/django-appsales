@@ -147,6 +147,10 @@ DB에 저장하는 script입니다.  =crontab -e=를 이용하여 system의 cron
 
 : @daily /path/to/cron.sh
 
+** Credits
+
+- Icon set : [[http://www.gosquared.com/liquidicity/archives/1493][Country Flag Icon Set]]
+
 ** Screenshots
 
 - 메인 페이지
