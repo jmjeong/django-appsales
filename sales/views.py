@@ -52,6 +52,7 @@ def main_page(request, sort):
         result = {}
         result['name'] = a.name
         result['appid'] = a.id
+        result['icon'] = "http://images.appshopper.com/icons/%s/%s.png" % (a.appleid[:3], a.appleid[3:])
         
         ss = Sales.objects.filter(app=a, date=date.date).values('category').annotate(Sum('units'))
         for s in ss:
@@ -215,11 +216,13 @@ def total_page(request, sort):
     sales = Sales.objects.values('app', 'category').annotate(Sum('units'))
     resultSet = []
     
-    for app, fs in groupby(sorted(sales, key=lambda r:r['app'], reverse=True),
+    for appid, fs in groupby(sorted(sales, key=lambda r:r['app'], reverse=True),
                            key=lambda r:r['app']):
         result = {}
-        result['appid'] = app
-        result['appname'] = App.objects.get(id=app).name
+        result['appid'] = appid
+        app = App.objects.get(id=appid)
+        result['appname'] = app.name
+        result['icon'] = "http://images.appshopper.com/icons/%s/%s.png" % (app.appleid[:3], app.appleid[3:])
 
         for f in fs:
             result[f['category']] = f['units__sum']
@@ -237,6 +240,16 @@ def total_page(request, sort):
         'summary':summary,
         })
     return render_to_response('total_page.html', var)
+
+@login_required
+def review_page(request, appid):
+    var = RequestContext(request, {
+        'resultSet' : resultSet,
+        'summary':summary,
+        })
+
+    return render_to_response('review_page.html', var)
+    
 
 def logout_page(request):
     logout(request)

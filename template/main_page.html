@@ -23,7 +23,7 @@ AppSales
 	  <table id="resultSet" cellpadding="2" cellspacing="2" border="0">
 		<tbody>
 		  <tr class="top-list-title">
-			<td class="top-list-name">Name</td>
+			<td class="top-list-name" colspan="2">Name</td>
 			<td class="top-list-col"><a href="/s/FR/?page={{ page }}">Free</a></td>
 			<td class="top-list-col"><a href="/s/PA/?page={{ page }}">Paid</a></td>
 			<td class="top-list-col"><a href="/s/IA/?page={{ page }}">InApp</a></td>
@@ -31,6 +31,7 @@ AppSales
 		  </tr>
 		  {% for f in resultSet %}
 		  <tr class="{% cycle 'data_odd' 'data_even' %}">
+			<td class="top-icon"><img src="{{ f.icon }}" height="25px"/></td>
 			<td class="top-list-name"><a href="/app/{{ f.appid }}/">{{ f.name|truncatewords:4 }}</a></td>
 			<td class="top-list-col">{{ f.FR|default:"-"|intcomma }}</td>
 			<td class="top-list-col">{{ f.PA|default:"-"|intcomma }}</td>
@@ -40,7 +41,7 @@ AppSales
 		  {% endfor %}
 		  {% if summary %}
 		  <tr class="bottom-summary">
-			<td class="top-list-name">Total</td>
+			<td class="top-list-name" colspan="2">Total</td>
 			<td class="top-list-col">{{ summary.FR|intcomma }}</td>
 			<td class="top-list-col">{{ summary.PA|intcomma }}</td>
 			<td class="top-list-col">{{ summary.IA|intcomma }}</td>
