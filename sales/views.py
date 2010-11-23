@@ -24,7 +24,7 @@ from sales.models import *
 import datetime
 from itertools import groupby
 
-ITEMS_PER_PAGE = 14
+icon_base_url = "http://images.appshopper.com/icons/%s/%s.png"
 
 @login_required
 def main_page(request, sort):
@@ -54,7 +54,7 @@ def main_page(request, sort):
         result = {}
         result['name'] = a.name
         result['appid'] = a.id
-        result['icon'] = "http://images.appshopper.com/icons/%s/%s.png" % (a.appleid[:3], a.appleid[3:])
+        result['icon'] =  icon_base_url % (a.appleid[:3], a.appleid[3:])
         
         ss = Sales.objects.filter(app=a, date=date.date).values('category').annotate(Sum('units'))
         for s in ss:
@@ -143,6 +143,8 @@ def app_page(request, appid, sort, json):
     if not sort:
         sort = 'date'
 
+    ITEMS_PER_PAGE = 14
+
     sales = Sales.objects.filter(app=appid).values('date','category').annotate(Sum('units'))
     
     resultSet = []
@@ -225,7 +227,7 @@ def total_page(request, sort):
         result['appid'] = appid
         app = App.objects.get(id=appid)
         result['appname'] = app.name
-        result['icon'] = "http://images.appshopper.com/icons/%s/%s.png" % (app.appleid[:3], app.appleid[3:])
+        result['icon'] = icon_base_url % (app.appleid[:3], app.appleid[3:])
 
         for f in fs:
             result[f['category']] = f['units__sum']
@@ -254,14 +256,12 @@ def review_page_detail(request, appid):
     
     reviews = Review.objects.filter(app=appid).order_by('-date')
 
-    icon = "http://images.appshopper.com/icons/%s/%s.png" % (appid.appleid[:3], appid.appleid[3:])
+    icon = icon_base_url % (appid.appleid[:3], appid.appleid[3:])
 
     var = RequestContext(request, {
         'resultSet' : reviews,
         'appName' : appid.name,
         'icon' : icon,
-        
-        'ITEMS_PER_PAGE' : ITEMS_PER_PAGE,
         })
 
     return render_to_response('review_page_detail.html', var)
@@ -281,7 +281,7 @@ def review_page(request, appid):
         result = {}
         result['appname'] = a.name
         result['appid'] = a.id
-        result['icon'] = "http://images.appshopper.com/icons/%s/%s.png" % (a.appleid[:3], a.appleid[3:])
+        result['icon'] = icon_base_url % (a.appleid[:3], a.appleid[3:])
         result['total'] = Review.objects.filter(app = a).count()
         result['current'] = Review.objects.filter(app = a).count()
         
