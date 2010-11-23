@@ -261,6 +261,7 @@ def review_page_detail(request, appid):
     var = RequestContext(request, {
         'resultSet' : reviews,
         'appName' : appid.name,
+        'appid' : appid.id,
         'icon' : icon,
         })
 

@@ -11,7 +11,7 @@ AppSales
 {% if user.username %}
 {% if resultSet %}
 {% autopaginate resultSet ITEMS_PER_PAGE %}
-<h3>{{ appName }}</h3>
+<h3>{{ appName }}(<a href="/review/{{ appid }}">review</a>)</h3>
 
 {% paginate %}
 <div id="my_chart"></div>

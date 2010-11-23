@@ -10,7 +10,7 @@ AppSales
 {% load pagination_tags %}
 {% if user.username %}
 {% autopaginate resultSet 50 %}
-<h3>{{ appName }}</h3>
+<h3><a href="/app/{{ appid }}">{{ appName }}</a></h3>
 <img src="{{ icon }}"/>
 
 <p>
