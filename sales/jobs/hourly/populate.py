@@ -120,6 +120,10 @@ class Job(HourlyJob):
                     app_id.name = data['appname']
                     app_id.appleid = data['appleid']
                     app_id.save()
+                else:
+                    if app_id.appleid is None:
+                        app_id.appleid = data['appleid']
+                        app_id.save()
 
                 sales = Sales()
                 sales.app = app_id
@@ -127,14 +131,7 @@ class Job(HourlyJob):
                 sales.units = data['units']
 
                 sales.proceeds = data['proceeds']
-
-                try:
-                    country = Country.objects.get(code=data['country'])
-                except:
-                    country = Country.objects.get(code='ZZ') # unknown
-
                 sales.country = data['country']
-
                 sales.currency = data['currency']
 
                 sales.price = data['price']
@@ -146,9 +143,4 @@ class Job(HourlyJob):
             d_id.populated = True
             d_id.save()
 
-        # try:
-        #     mail_admins('Cron.populate()', reports)
-        # except:
-        #     pass
-        
         pass
