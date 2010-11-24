@@ -263,6 +263,8 @@ def review_page_detail(request, appid):
     versions = Review.objects.filter(app=appid).values('version').distinct().order_by('-version')
     if versions:
         latest_version = versions[0]['version']
+    else:
+        latest_version = Non
 
     var = RequestContext(request, {
         'appName' : appid.name,
@@ -291,6 +293,8 @@ def review_page(request, appid):
         versions = Review.objects.filter(app=a).values('version').distinct().order_by('-version')
         if versions:
             latest = versions[0]['version']
+        else:
+            latest = None
         
         result = {}
         result['appname'] = a.name
