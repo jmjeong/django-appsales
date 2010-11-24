@@ -258,13 +258,15 @@ def review_page_detail(request, appid):
 
     if appid.appleid:
         icon = icon_base_url % (appid.appleid[:3], appid.appleid[3:])
+    else:
+        icon = None
     
     reviews = Review.objects.filter(app=appid).order_by('-version', '-date')
     versions = Review.objects.filter(app=appid).values('version').distinct().order_by('-version')
     if versions:
         latest_version = versions[0]['version']
     else:
-        latest_version = Non
+        latest_version = None
 
     var = RequestContext(request, {
         'appName' : appid.name,

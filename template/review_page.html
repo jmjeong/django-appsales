@@ -16,7 +16,7 @@ AppSales
 {% if countrys %}
 Reviews from... <br/>
 {% for f in countrys %}
-<img src="/site_media/ImageFlags/{{ f.country__code }}.png"/>
+<img src="/site_media/ImageFlags/{{ f.country__code|lower }}.png"/>
 {% endfor %}
 {% endif %}
 

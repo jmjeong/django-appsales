@@ -23,7 +23,7 @@ AppSales
 {% for f in resultSet %}
 <div id="rev{% ifequal latest_version f.version %}current{% endifequal %}">
   
-<img id="rev" src="/site_media/ImageFlags/{{ f.country.code }}.png"/> {{ f.country.code }}
+<img id="rev" src="/site_media/ImageFlags/{{ f.country.code|lower }}.png"/> {{ f.country.code }}
 {% spaceless %}
 <span id="rev-star">
 {% for i in f.stars|get_range %}<img src="/site_media/stars.png" height="13"/>{% endfor %}
