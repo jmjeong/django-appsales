@@ -54,7 +54,8 @@ def main_page(request, sort):
         result = {}
         result['name'] = a.name
         result['appid'] = a.id
-        result['icon'] =  icon_base_url % (a.appleid[:3], a.appleid[3:])
+        if a.appleid:
+            result['icon'] =  icon_base_url % (a.appleid[:3], a.appleid[3:])
         
         ss = Sales.objects.filter(app=a, date=date.date).values('category').annotate(Sum('units'))
         for s in ss:
@@ -227,7 +228,8 @@ def total_page(request, sort):
         result['appid'] = appid
         app = App.objects.get(id=appid)
         result['appname'] = app.name
-        result['icon'] = icon_base_url % (app.appleid[:3], app.appleid[3:])
+        if a.appleid:
+            result['icon'] = icon_base_url % (app.appleid[:3], app.appleid[3:])
 
         for f in fs:
             result[f['category']] = f['units__sum']
@@ -254,7 +256,8 @@ def review_page_detail(request, appid):
     except:
         raise Http404
 
-    icon = icon_base_url % (appid.appleid[:3], appid.appleid[3:])
+    if appid.appleid:
+        icon = icon_base_url % (appid.appleid[:3], appid.appleid[3:])
     
     reviews = Review.objects.filter(app=appid).order_by('-version', '-date')
     versions = Review.objects.filter(app=appid).values('version').distinct().order_by('-version')
@@ -292,7 +295,8 @@ def review_page(request, appid):
         result = {}
         result['appname'] = a.name
         result['appid'] = a.id
-        result['icon'] = icon_base_url % (a.appleid[:3], a.appleid[3:])
+        if a.appleid:
+            result['icon'] = icon_base_url % (a.appleid[:3], a.appleid[3:])
         result['total'] = Review.objects.filter(app = a).count()
         result['current'] = Review.objects.filter(app = a, version=latest).count()
         avg_star = Review.objects.filter(app = a, version=latest).aggregate(Avg('stars'))
