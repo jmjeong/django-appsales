@@ -2,6 +2,26 @@
 	/* float:right; */
 }
 
+#rev {
+    border: 1px solid #bbbbbb;
+}
+#revcurrent {
+	background: lavender;
+    border: 1px solid #bbbbbb;
+}
+
+#revcontentcurrent {
+	background: linen;
+	padding : 2px;
+}
+
+#rev-small
+{
+	margin: 0ex;
+	font-size: 90%;
+}
+
+
 input {
 	display: block;
 }
@@ -50,6 +70,12 @@ input {
 	width : 50px;
 	text-align : right;
 }
+
+.top-review-col {
+	width : 100px;
+	text-align : left;
+}
+
 
 .pagination {
 	padding: 5px;

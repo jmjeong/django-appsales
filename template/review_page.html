@@ -7,10 +7,18 @@ AppSales
 {% endblock %}
 {% block content %}
 {% load humanize %}
+{% load get_range %}
 {% load pagination_tags %}
 {% if user.username %}
 {% if resultSet %}
 <h3>User Reviews</h3>
+
+{% if countrys %}
+Reviews from... <br/>
+{% for f in countrys %}
+<img src="/site_media/ImageFlags/{{ f.country__code }}.png"/>
+{% endfor %}
+{% endif %}
 
 <table>
   <tr>
@@ -19,9 +27,9 @@ AppSales
 		<tbody>
 		  <tr class="top-list-title">
 			<td class="top-list-name" colspan="2">Application</td>
-			<td class="top-list-col">Current</td>
-			<td class="top-list-col">Total</td>
-			<td class="top-list-col">Avg</td>
+			<td class="top-review-col">Review</td>
+			<td class="top-review-col">Current</td>
+			<td class="top-review-col">All</td>
 		  </tr>
 		  {% for f in resultSet %}
 		  <tr class="{% cycle 'data_odd' 'data_even' %}">
@@ -29,9 +37,9 @@ AppSales
 			<td class="top-list-name">
 			  <a href="/review/{{ f.appid }}/">{{ f.appname|truncatewords:4  }}</a>
 			</td>
-			<td class="top-list-col">{{ f.current }}</td>
-			<td class="top-list-col">{{ f.total }}</td>
-			<td class="top-list-col">Avg</td>
+			<td class="top-review-col">{% for i in f.avg|get_range %}<img src="/site_media/stars.png" height="13"/>{% endfor %}</td>
+			<td class="top-review-col">{{ f.current }}</td>
+			<td class="top-review-col">{{ f.total }}</td>
 		  </tr>
 		  {% endfor %}
 		</tbody>

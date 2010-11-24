@@ -7,6 +7,7 @@ AppSales
 {% endblock %}
 {% block content %}
 {% load humanize %}
+{% load get_range %}
 {% load pagination_tags %}
 {% if user.username %}
 {% autopaginate resultSet 50 %}
@@ -18,23 +19,25 @@ AppSales
 <p>
 
 {% if resultSet %}
-  
-{% for f in resultSet %}
-<table>
-<tr>
-<td>
-<img src="/site_media/ImageFlags/{{ f.country.code }}.png"/>
-<b>{{ f.title }}</b> {{ f.stars }} star
-</td>
-</tr>
-<tr><td>
-<div class="small">by {{ f.reviewer }} - Version {{ f.version }} - {{ f.date }}</div>
-</td></tr>
-<tr><td>
-<pre id="content" width="40px">{% autoescape off %}{{ f.content }}{% endautoescape %}</pre>
-</td></tr>
-</table>
 
+{% for f in resultSet %}
+<div id="rev{% ifequal latest_version f.version %}current{% endifequal %}">
+  
+<img id="rev" src="/site_media/ImageFlags/{{ f.country.code }}.png"/> {{ f.country.code }}
+{% spaceless %}
+<span id="rev-star">
+{% for i in f.stars|get_range %}<img src="/site_media/stars.png" height="13"/>{% endfor %}
+{% for i in f.stars|add:"-5"|get_range %}<img src="/site_media/stars-grey.png" height="13"/>{% endfor %}
+</span>
+{% endspaceless %}
+<span id="rev-title"><b>{{ f.title }}</b></span><br/>
+<span id="rev-small">(Version {{ f.version }}) - {{ f.reviewer }} - {{ f.date }}</span>
+<br/>
+<div id="revcontent{% ifequal latest_version f.version %}current{% endifequal %}">
+<pre width="60px">{% autoescape off %}{{ f.content }}{% endautoescape %}</pre>
+</div>
+
+</div>
 {% endfor %}
 
 <p>

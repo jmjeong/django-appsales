@@ -253,21 +253,24 @@ def review_page_detail(request, appid):
         appid = App.objects.get(pk=appid)
     except:
         raise Http404
-    
-    reviews = Review.objects.filter(app=appid).order_by('-date')
 
     icon = icon_base_url % (appid.appleid[:3], appid.appleid[3:])
+    
+    reviews = Review.objects.filter(app=appid).order_by('-version', '-date')
+    versions = Review.objects.filter(app=appid).values('version').distinct().order_by('-version')
+    if versions:
+        latest_version = versions[0]['version']
 
     var = RequestContext(request, {
-        'resultSet' : reviews,
         'appName' : appid.name,
         'appid' : appid.id,
         'icon' : icon,
+        'latest_version' : latest_version,
+        
+        'resultSet' : reviews,
         })
 
     return render_to_response('review_page_detail.html', var)
-    
-    
 
 @login_required
 def review_page(request, appid):
@@ -276,15 +279,28 @@ def review_page(request, appid):
 
     if appid:
         return review_page_detail(request, appid)
+
+    countrys = Review.objects.values('country__code').distinct()
     
     apps = App.objects.all()
     for a in apps:
+
+        versions = Review.objects.filter(app=a).values('version').distinct().order_by('-version')
+        if versions:
+            latest = versions[0]['version']
+        
         result = {}
         result['appname'] = a.name
         result['appid'] = a.id
         result['icon'] = icon_base_url % (a.appleid[:3], a.appleid[3:])
         result['total'] = Review.objects.filter(app = a).count()
-        result['current'] = Review.objects.filter(app = a).count()
+        result['current'] = Review.objects.filter(app = a, version=latest).count()
+        avg_star = Review.objects.filter(app = a, version=latest).aggregate(Avg('stars'))
+        if avg_star['stars__avg']:
+            avg_star = int(float(avg_star['stars__avg'])+0.5)
+        else:
+            avg_star = 0
+        result['avg'] = avg_star
         
         resultSet.append(result)
 
@@ -292,6 +308,7 @@ def review_page(request, appid):
     
     var = RequestContext(request, {
         'resultSet' : resultSet,
+        'countrys' : countrys,
         })
 
     return render_to_response('review_page.html', var)
