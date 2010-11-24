@@ -19,14 +19,14 @@ class Job(BaseJob):
 
     COUNTRY_CODE = (
         ( "kr", "143466", "%d-%b-%Y"),
-        # ( "us", "143441", '%b %d, %Y'),
-        # ( "hk", "143463", "%d-%b-%Y"),
-        # ( "jp", "143462", "%d-%b-%Y"),
-        # ( "au", "143460", "%d-%b-%Y"),
-        # ( "de", "143443", "%d.%m.%Y"),
-        # ( "gb", "143444", "%d-%b-%Y"),
+        ( "us", "143441", '%b %d, %Y'),
+        ( "hk", "143463", "%d-%b-%Y"),
+        ( "jp", "143462", "%d-%b-%Y"),
+        ( "au", "143460", "%d-%b-%Y"),
+        ( "de", "143443", "%d.%m.%Y"),
+        ( "gb", "143444", "%d-%b-%Y"),
         # ( "fr", "143442", "%d %b %Y"),
-        # ( "ch", "143459", "%d-%b-%Y")
+        ( "ch", "143459", "%d-%b-%Y")
         )
 
     def read_html(self, opener, url):
@@ -125,7 +125,7 @@ class Job(BaseJob):
                     try:
                         Review.objects.get(app=app, country=country, title=r['title'], stars=r['stars'],
                                            reviewer = r['name'], version = r['version'], date = date)
-                        print "pass ... [%s]" % r['title']
+                        # print "pass ... [%s]" % r['title']
                         continue
                     except Review.DoesNotExist:
                         pass
@@ -139,6 +139,8 @@ class Job(BaseJob):
                     entry.version = r['version']
                     entry.date = date
                     entry.content = r['content']
+
+                    print "add  ... [%s]" % r['title']
 
                     entry.save()
 
