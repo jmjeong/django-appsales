@@ -86,7 +86,7 @@ class Job(BaseJob):
         urlBase = "http://ax.phobos.apple.com.edgesuite.net/WebObjects/MZStore.woa/wa/viewContentsUserReviews?id=%s&&pageNumber=%d&sortOrdering=4&type=Purple+Software"
 
         for cc in self.COUNTRY_CODE:
-            print cc
+            print "Downloading Reviews from [%s]..." % cc[0].upper()
             
             for app in App.objects.all():
 
@@ -115,10 +115,20 @@ class Job(BaseJob):
                     if len(reviews) > 0:
                         reviews_all.extend(reviews)
                         count += 1
+                        
+                        # check for saving time
+                        try:
+                            r = reviews[0]
+                            date = datetime.datetime.strptime(r['date'], cc[2])                    
+                            Review.objects.get(app=app, country=country, title=r['title'], stars=r['stars'],
+                                               reviewer = r['name'], version = r['version'], date = date)
+                            break
+                        except Review.DoesNotExist: 
+                            pass
                     else:
                         break
 
-                print app.name, len(reviews_all)
+                print app.name, ":", len(reviews_all)
 
                 for r in reviews_all:
                     date = datetime.datetime.strptime(r['date'], cc[2])                    
