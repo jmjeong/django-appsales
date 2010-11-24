@@ -288,6 +288,7 @@ def review_page(request, appid):
         return review_page_detail(request, appid)
 
     countrys = Review.objects.values('country__code').distinct()
+    oneweeksago = datetime.datetime.now() + datetime.timedelta(days=-7)
     
     apps = App.objects.all()
     for a in apps:
@@ -311,6 +312,7 @@ def review_page(request, appid):
         else:
             avg_star = 0
         result['avg'] = avg_star
+        result['recent'] = Review.objects.filter(app = a, date__gt = oneweeksago).count()
         
         resultSet.append(result)
 

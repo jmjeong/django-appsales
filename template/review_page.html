@@ -28,8 +28,8 @@ Reviews from... <br/>
 		  <tr class="top-list-title">
 			<td class="top-list-name" colspan="2">Application</td>
 			<td class="top-review-col">Review</td>
-			<td class="top-review-col">Current</td>
-			<td class="top-review-col">All</td>
+			<td class="top-list-col">All(Current)</td>
+			<td class="top-list-col">New</td>
 		  </tr>
 		  {% for f in resultSet %}
 		  <tr class="{% cycle 'data_odd' 'data_even' %}">
@@ -38,8 +38,8 @@ Reviews from... <br/>
 			  <a href="/review/{{ f.appid }}/">{{ f.appname|truncatewords:4  }}</a>
 			</td>
 			<td class="top-review-col">{% for i in f.avg|get_range %}<img src="/site_media/stars.png" height="13"/>{% endfor %}</td>
-			<td class="top-review-col">{{ f.current }}</td>
-			<td class="top-review-col">{{ f.total }}</td>
+			<td class="top-list-col">{{ f.total }}({{ f.current }})</td>
+			<td class="top-list-col">{{ f.recent }}</td>
 		  </tr>
 		  {% endfor %}
 		</tbody>
