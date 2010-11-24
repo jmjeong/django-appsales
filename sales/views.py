@@ -228,7 +228,7 @@ def total_page(request, sort):
         result['appid'] = appid
         app = App.objects.get(id=appid)
         result['appname'] = app.name
-        if a.appleid:
+        if app.appleid:
             result['icon'] = icon_base_url % (app.appleid[:3], app.appleid[3:])
 
         for f in fs:
