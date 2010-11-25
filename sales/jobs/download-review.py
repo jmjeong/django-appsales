@@ -11,8 +11,14 @@ import urllib
 import urllib2
 import re
 import datetime
+import sys
 
 from sales.models import App, Date, Sales, Country, Review
+
+rtitle = re.compile(r'<TextView topInset="0" truncation="right" leftInset="0" squishiness="1" styleSet="basic13" textJust="left" maxLines="1">.*<b>(.*)</b>.*</TextView>')
+rstar = re.compile(r'<HBoxView topInset="1" alt="(.*)">')
+rname = re.compile(r'viewUsersUserReviews.*?>.*?<b>\s*?(.*?)\s*?</b>.*?</GotoURL>\s*-\s*Version\s(.*?)-(.*?)</SetFontStyle>', re.M|re.S)
+rcontent = re.compile(r'<SetFontStyle normalStyle="textColor">(.*?)</SetFontStyle>', re.M|re.S)
 
 class Job(BaseJob):
     help = "Download Reviews about application"
@@ -36,26 +42,29 @@ class Job(BaseJob):
         return html
 
     def extract_review(self, content):
+        global rtitle, rstar, rname, rcontent
+        
         reviews = []
 
         while True:
             review = {}
-            g  = re.search(r'<TextView topInset="0" truncation="right" leftInset="0" squishiness="1" styleSet="basic13" textJust="left" maxLines="1">.*<b>(.*)</b>.*</TextView>', content)
+            g  = rtitle.search(content)
             if g:
                 review['title'] = g.group(1).strip()
                 content = content[g.end():]
             else:
                 break
             
-
-            g = re.search(r'<HBoxView topInset="1" alt="(.*)">', content)
+            g = rstar.search(content)
             if g:
                 review['stars'] = int(re.search("(\d)", g.group(1)).group(1))
                 content = content[g.end():]
             else:
+                print g
+                sys.exit(0)
                 break
             
-            g = re.search(r'viewUsersUserReviews.*?>.*?<b>\s*?(.*?)\s*?</b>.*?</GotoURL>\s*-\s*Version\s(.*?)-(.*?)</SetFontStyle>', content, re.M|re.S)
+            g = rname.search(content)
             if g:
                 review['name'] = g.group(1).strip()
                 review['version'] = g.group(2).strip()
@@ -64,7 +73,7 @@ class Job(BaseJob):
             else:
                 break
             
-            g = re.search(r'<SetFontStyle normalStyle="textColor">(.*?)</SetFontStyle>', content, re.M|re.S)
+            g = rcontent.search(content)
             if g:
                 review['content'] = g.group(1).strip()
                 content = content[g.end():]
