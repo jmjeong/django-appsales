@@ -48,7 +48,6 @@ class download_report(Thread):
         return html
 
     def extract_review(self, content):
-        global rtitle, rstar, rname, rcontent
         
         reviews = []
 
@@ -142,7 +141,6 @@ class Job(BaseJob):
             
     def execute(self):
         # download reviews per application
-        global COUNTRY_CODE
 
         download_thread = []
         
