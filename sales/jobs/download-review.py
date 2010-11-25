@@ -12,6 +12,7 @@ import urllib2
 import re
 import datetime
 import sys
+from threading import Thread
 
 from sales.models import App, Date, Sales, Country, Review
 
@@ -20,20 +21,25 @@ rstar = re.compile(r'<HBoxView topInset="1" alt="(.*)">')
 rname = re.compile(r'viewUsersUserReviews.*?>.*?<b>\s*?(.*?)\s*?</b>.*?</GotoURL>\s*-\s*Version\s(.*?)-(.*?)</SetFontStyle>', re.M|re.S)
 rcontent = re.compile(r'<SetFontStyle normalStyle="textColor">(.*?)</SetFontStyle>', re.M|re.S)
 
-class Job(BaseJob):
-    help = "Download Reviews about application"
+COUNTRY_CODE = (
+    ( "kr", "143466", "%d-%b-%Y"),
+    ( "us", "143441", '%b %d, %Y'),
+    ( "hk", "143463", "%d-%b-%Y"),
+    ( "jp", "143462", "%d-%b-%Y"),
+    ( "au", "143460", "%d-%b-%Y"),
+    ( "de", "143443", "%d.%m.%Y"),
+    ( "gb", "143444", "%d-%b-%Y"),
+    # ( "fr", "143442", "%d %b %Y"),
+    ( "ch", "143459", "%d-%b-%Y")
+    )
 
-    COUNTRY_CODE = (
-        ( "kr", "143466", "%d-%b-%Y"),
-        ( "us", "143441", '%b %d, %Y'),
-        ( "hk", "143463", "%d-%b-%Y"),
-        ( "jp", "143462", "%d-%b-%Y"),
-        ( "au", "143460", "%d-%b-%Y"),
-        ( "de", "143443", "%d.%m.%Y"),
-        ( "gb", "143444", "%d-%b-%Y"),
-        # ( "fr", "143442", "%d %b %Y"),
-        ( "ch", "143459", "%d-%b-%Y")
-        )
+class download_report(Thread):
+    def __init__(self, app, country):
+        Thread.__init__(self)
+        self.country = country
+        self.app = app;
+        self.status = -1
+        self.reviews = []
 
     def read_html(self, opener, url):
         request = urllib2.Request(url, None)
@@ -83,83 +89,95 @@ class Job(BaseJob):
             reviews.append(review)
 
         return reviews
+        
+
+    def run(self):
+        urlBase = "http://ax.phobos.apple.com.edgesuite.net/WebObjects/MZStore.woa/wa/viewContentsUserReviews?id=%s&&pageNumber=%d&sortOrdering=4&type=Purple+Software"
+
+        # print "Downloading Reviews from [%s] about %s..." % (self.country[0].upper(), self.app.name)
+        
+        opener = urllib2.build_opener()
+        opener.addheaders = [('user-agent', 'iTunes/4.2 (Macintosh; U; PPC Mac OS X 10.2)'),]
+        opener.addheaders = [('X-Apple-Store-Front', '%s-1' % self.country[1]),]
+        try:
+            country = Country.objects.get(code = self.country[0].upper())
+        except DoesNotExist:
+            print cc[0], " does not exist"
+            return
+
+        count = 0
+        
+        while True:
+            urlWebsite = urlBase % (self.app.appleid, count)
+
+            request = urllib2.Request(urlWebsite)
+            urlHandle = opener.open(request)
+            content = self.read_html(opener, urlWebsite)
+
+            reviews = self.extract_review(content)
+            if len(reviews) > 0:
+                self.reviews.extend(reviews)
+                count += 1
+
+                # check for saving time (it is sufficient to check the first item)
+                try:
+                    r = reviews[0]
+                    try:
+                        date = datetime.datetime.strptime(r['date'], self.country[2])
+                    except:
+                        print "*" * 50
+                        print "Error: %s, %s" % (r['date'], self.country[2])
+                        date = None
+                        pass
+                    Review.objects.get(app=self.app, country=country, title=r['title'], stars=r['stars'],
+                                       reviewer = r['name'], version = r['version'], date = date)
+                    break
+                except Review.DoesNotExist: 
+                    pass
+            else:
+                break
+        
+class Job(BaseJob):
+    help = "Download Reviews about application"
             
     def execute(self):
         # download reviews per application
+        global COUNTRY_CODE
 
-        opener = urllib2.build_opener()
- 
-        opener.addheaders = [('user-agent', 'iTunes/4.2 (Macintosh; U; PPC Mac OS X 10.2)'),]
-        opener.addheaders = [('X-Apple-Store-Front', '143466-1'),]
-
-        urlBase = "http://ax.phobos.apple.com.edgesuite.net/WebObjects/MZStore.woa/wa/viewContentsUserReviews?id=%s&&pageNumber=%d&sortOrdering=4&type=Purple+Software"
-
-        for cc in self.COUNTRY_CODE:
-            print "Downloading Reviews from [%s]..." % cc[0].upper()
-            
+        download_thread = []
+        
+        for cc in COUNTRY_CODE:
             for app in App.objects.all():
+                thread = download_report(app, cc)
+                download_thread.append(thread)
+                thread.start()
 
-                # change store name
-                opener.addheaders = [('X-Apple-Store-Front', '%s-1' % cc[1] ),]
+        for thread in download_thread:
+            thread.join()
+
+            # print "%s from [%s] : %d" % (thread.app.name, thread.country[0].upper(),len(thread.reviews))
+
+            for r in thread.reviews:
+                date = datetime.datetime.strptime(r['date'], thread.country[2])                    
                 try:
-                    country = Country.objects.get(code = cc[0].upper())
-                except DoesNotExist:
-                    print cc[0], " does not exist"
+                    Review.objects.get(app=thread.app, title=r['title'], stars=r['stars'],
+                                       reviewer = r['name'], version = r['version'], date = date)
+                    # print "pass ... [%s]" % r['title']
                     continue
+                except Review.DoesNotExist:
+                    pass
 
-                # app = App.objects.get(name='iHappyDays')
+                entry = Review()
+                entry.app = app
+                entry.country = country
+                entry.title = r['title']
+                entry.stars = r['stars']
+                entry.reviewer = r['name']
+                entry.version = r['version']
+                entry.date = date
+                entry.content = r['content']
 
-                count = 0
-                reviews_all = []
+                print "add  ... [%s]" % r['title']
 
-                while True:
-
-                    urlWebsite = urlBase % (app.appleid, count)
-
-                    request = urllib2.Request(urlWebsite)
-                    urlHandle = opener.open(request)
-                    content = self.read_html(opener, urlWebsite)
-
-                    reviews = self.extract_review(content)
-                    if len(reviews) > 0:
-                        reviews_all.extend(reviews)
-                        count += 1
-                        
-                        # check for saving time
-                        try:
-                            r = reviews[0]
-                            date = datetime.datetime.strptime(r['date'], cc[2])                    
-                            Review.objects.get(app=app, country=country, title=r['title'], stars=r['stars'],
-                                               reviewer = r['name'], version = r['version'], date = date)
-                            break
-                        except Review.DoesNotExist: 
-                            pass
-                    else:
-                        break
-
-                print app.name, ":", len(reviews_all)
-
-                for r in reviews_all:
-                    date = datetime.datetime.strptime(r['date'], cc[2])                    
-                    try:
-                        Review.objects.get(app=app, country=country, title=r['title'], stars=r['stars'],
-                                           reviewer = r['name'], version = r['version'], date = date)
-                        # print "pass ... [%s]" % r['title']
-                        continue
-                    except Review.DoesNotExist:
-                        pass
-                    
-                    entry = Review()
-                    entry.app = app
-                    entry.country = country
-                    entry.title = r['title']
-                    entry.stars = r['stars']
-                    entry.reviewer = r['name']
-                    entry.version = r['version']
-                    entry.date = date
-                    entry.content = r['content']
-
-                    print "add  ... [%s]" % r['title']
-
-                    entry.save()
+                entry.save()
 
