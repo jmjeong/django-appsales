@@ -34,21 +34,28 @@ COUNTRY_CODE = (
     )
 
 class download_report(Thread):
-    def __init__(self, app, country):
+    def __init__(self, app, country, appleid, countryname, countrycode, dateformat):
         Thread.__init__(self)
+
+        # Foreign key
+        self.app = app
         self.country = country
-        self.app = app;
-        self.status = -1
+        
+        self.appleid = appleid
+        self.countrycode = countrycode
+        self.countryname = countryname
+        self.dateformat = dateformat
+        
+        # output
         self.reviews = []
 
-    def read_html(self, opener, url):
+    def __read_html(self, opener, url):
         request = urllib2.Request(url, None)
         urlHandle = opener.open(request)
         html = urlHandle.read()
         return html
 
-    def extract_review(self, content):
-        
+    def __extract_review(self, content):
         reviews = []
 
         while True:
@@ -88,51 +95,50 @@ class download_report(Thread):
             reviews.append(review)
 
         return reviews
-        
+
+    def __check_exists(self, r):
+        try:
+            Review.objects.get(app=self.app, country=self.country, title=r['title'], stars=r['stars'],
+                               reviewer = r['name'], version = r['version'])
+            return True
+        except Review.DoesNotExist: 
+            return False
+
+    def __post_process(self, reviews, app, country, dateformat):
+        for r in reviews:
+            r['app'] = app
+            r['country'] = country
+            try:
+                r['date'] = datetime.datetime.strptime(r['date'], dateformat)
+            except AttributeError:
+                print r['date'], dateformat
+                pass
 
     def run(self):
         urlBase = "http://ax.phobos.apple.com.edgesuite.net/WebObjects/MZStore.woa/wa/viewContentsUserReviews?id=%s&&pageNumber=%d&sortOrdering=4&type=Purple+Software"
 
-        # print "Downloading Reviews from [%s] about %s..." % (self.country[0].upper(), self.app.name)
-        
         opener = urllib2.build_opener()
         opener.addheaders = [('user-agent', 'iTunes/4.2 (Macintosh; U; PPC Mac OS X 10.2)'),]
-        opener.addheaders = [('X-Apple-Store-Front', '%s-1' % self.country[1]),]
-        try:
-            country = Country.objects.get(code = self.country[0].upper())
-        except DoesNotExist:
-            print cc[0], " does not exist"
-            return
+        opener.addheaders = [('X-Apple-Store-Front', '%s-1' % self.countrycode),]
 
         count = 0
         
         while True:
-            urlWebsite = urlBase % (self.app.appleid, count)
+            urlWebsite = urlBase % (self.appleid, count)
 
             request = urllib2.Request(urlWebsite)
             urlHandle = opener.open(request)
-            content = self.read_html(opener, urlWebsite)
+            content = self.__read_html(opener, urlWebsite)
 
-            reviews = self.extract_review(content)
-            if len(reviews) > 0:
-                self.reviews.extend(reviews)
+            reviews = self.__extract_review(content)
+
+            # convert date format, add foreign key for app, country
+            self.__post_process(reviews, self.app, self.country, self.dateformat)
+            self.reviews.extend(reviews)
+
+            # if exists, download the next page 
+            if len(reviews) > 0 and not self.__check_exists(reviews[0]):
                 count += 1
-
-                # check for saving time (it is sufficient to check the first item)
-                try:
-                    r = reviews[0]
-                    try:
-                        date = datetime.datetime.strptime(r['date'], self.country[2])
-                    except ValueError:
-                        print "*" * 50
-                        print "Error: %s, %s" % (r['date'], self.country[2])
-                        date = None
-                        pass
-                    Review.objects.get(app=self.app, country=country, title=r['title'], stars=r['stars'],
-                                       reviewer = r['name'], version = r['version'], date = date)
-                    break
-                except Review.DoesNotExist: 
-                    pass
             else:
                 break
         
@@ -145,41 +151,40 @@ class Job(BaseJob):
         download_thread = []
         
         for cc in COUNTRY_CODE:
+            try:
+                country = Country.objects.get(code = cc[0].upper())
+            except Country.DoesNotExist:
+                print cc[0], " does not exist"
+                raise Exception
+
             for app in App.objects.all():
-                thread = download_report(app, cc)
+                thread = download_report(app, country, app.appleid,
+                                         countryname=cc[0], countrycode=cc[1], dateformat=cc[2])
                 download_thread.append(thread)
                 thread.start()
 
         for thread in download_thread:
             thread.join()
 
-            # print "%s from [%s] : %d" % (thread.app.name, thread.country[0].upper(),len(thread.reviews))
-
-            try:
-                country = Country.objects.get(code = thread.country[0].upper())
-            except DoesNotExist:
-                print cc[0], " does not exist"
-                pass
-
+            print "%s from [%s] : %d" % (thread.app.name.encode('utf-8'), thread.countryname, len(thread.reviews))
             for r in thread.reviews:
-                
-                date = datetime.datetime.strptime(r['date'], thread.country[2])                    
                 try:
-                    Review.objects.get(app=thread.app, title=r['title'], stars=r['stars'],
-                                       reviewer = r['name'], version = r['version'], date = date)
+                    Review.objects.get(app=r['app'], country=r['country'], title=r['title'],
+                                       stars=r['stars'], reviewer = r['name'],
+                                       version = r['version'], date = r['date'])
                     # print "pass ... [%s]" % r['title']
                     continue
                 except Review.DoesNotExist:
                     pass
 
                 entry = Review()
-                entry.app = app
-                entry.country = country
+                entry.app = r['app']
+                entry.country = r['country']
                 entry.title = r['title']
                 entry.stars = r['stars']
                 entry.reviewer = r['name']
                 entry.version = r['version']
-                entry.date = date
+                entry.date = r['date']
                 entry.content = r['content']
 
                 print "add  ... [%s]" % r['title']
