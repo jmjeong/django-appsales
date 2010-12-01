@@ -123,7 +123,7 @@ class download_report(Thread):
                     r = reviews[0]
                     try:
                         date = datetime.datetime.strptime(r['date'], self.country[2])
-                    except:
+                    except ValueError:
                         print "*" * 50
                         print "Error: %s, %s" % (r['date'], self.country[2])
                         date = None
@@ -155,7 +155,14 @@ class Job(BaseJob):
 
             # print "%s from [%s] : %d" % (thread.app.name, thread.country[0].upper(),len(thread.reviews))
 
+            try:
+                country = Country.objects.get(code = thread.country[0].upper())
+            except DoesNotExist:
+                print cc[0], " does not exist"
+                pass
+
             for r in thread.reviews:
+                
                 date = datetime.datetime.strptime(r['date'], thread.country[2])                    
                 try:
                     Review.objects.get(app=thread.app, title=r['title'], stars=r['stars'],
