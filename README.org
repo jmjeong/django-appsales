@@ -65,7 +65,7 @@ For deploying your site, consults [[http://docs.djangoproject.com/en/dev/howto/d
 
 You can register download script in crontab.
 
-: =crontab -e=
+: crontab -e
 
 : @daily /path/to/cron.sh
 : @daily /path/to/manage.py runjob download-review
