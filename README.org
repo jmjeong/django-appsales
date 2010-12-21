@@ -56,14 +56,14 @@ You can install all of above program using =easy install=.
 
 For deploying your site, consults [[http://docs.djangoproject.com/en/dev/howto/deployment/][Django deployment]] document.
 
-** Population daily sales and reviews of application
+** Download and Populate daily sales and reviews 
 
 - =./manage.py runjob download= 
 - =./manage.py runjob download-review=
 
-*** Crontab
+*** Automation
 
-You can register download script in crontab.
+You can register download script in crontab for automation.
 
 : crontab -e
 
