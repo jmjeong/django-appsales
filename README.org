@@ -1,8 +1,4 @@
 * django-appsales									 :appsales:python:django:
-  :PROPERTIES:
-  :Post Date: [2010-11-10 Wed 20:28]
-  :Post ID: 522
-  :END:
 
 django-appsales helps iPhone and iPad developers to track their application 
 sales. django-appsales download your data from the web and store it in local database.
@@ -90,5 +86,5 @@ You can register download script in crontab.
 
 ** Credits
 
-- Jaemok Jeong(jmjeong@gmail.nospam.com)
+- author : Jaemok Jeong(jmjeong@gmail.nospam.com)
 - [[http://www.gosquared.com/liquidicity/archives/1493][Country Flag Icon Set]] 
