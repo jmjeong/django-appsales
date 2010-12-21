@@ -90,5 +90,5 @@ You can register download script in crontab.
 
 ** Credits
 
-- Jaemok Jeong <jmejong@gmail.nospam.com> : Main Author
-- Country Flag Icon set :  [[http://www.gosquared.com/liquidicity/archives/1493][Country Flag Icon Set]] 
+- Jaemok Jeong(jmjeong@gmail.nospam.com)
+- [[http://www.gosquared.com/liquidicity/archives/1493][Country Flag Icon Set]] 
