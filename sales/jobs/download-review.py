@@ -72,7 +72,6 @@ class download_report(Thread):
                 review['stars'] = int(re.search("(\d)", g.group(1)).group(1))
                 content = content[g.end():]
             else:
-                print g
                 sys.exit(0)
                 break
             
