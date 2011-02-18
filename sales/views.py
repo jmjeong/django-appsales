@@ -19,7 +19,7 @@ from django.shortcuts import render_to_response
 from django.contrib.auth import logout
 from django.db.models import Avg, Sum
 
-from sales.models import *
+from sales.models import App, Date, Country, Review, Sales
 
 import datetime
 from itertools import groupby
@@ -110,8 +110,10 @@ def chart_data(appName, sort, dataSet, subsummary):
         # if 'sort' is date, use the interesing data
         if subsummary['FR'] > subsummary['PA']:
             display = 'FR'
-        else:
+        elif if subsummary['PA'] > subsummary['IA']:
             display = 'PA'
+        else:
+            display = 'IA'
         b1.values = [f[display] if display in f else 0 for f in dataSet]
         b1.text = display
     else:
