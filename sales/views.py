@@ -110,7 +110,7 @@ def chart_data(appName, sort, dataSet, subsummary):
         # if 'sort' is date, use the interesing data
         if subsummary['FR'] > subsummary['PA']:
             display = 'FR'
-        elif if subsummary['PA'] > subsummary['IA']:
+        elif subsummary['PA'] > subsummary['IA']:
             display = 'PA'
         else:
             display = 'IA'
