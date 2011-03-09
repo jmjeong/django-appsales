@@ -1,6 +1,7 @@
 .DS_Store
 *.pyc
 *~
+*-sales-rawdata/*
 /local_settings-jmjeong.py
 /sales-rawdata.bak
 /sales.sqlite3-journal

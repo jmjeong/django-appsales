@@ -39,7 +39,7 @@ def main_page(request):
 @login_required
 def main_sort_page(request, sort):
 
-    dateSet = Date.objects.all().order_by('-date')
+    dateSet = Date.objects.all().order_by('-date').distinct()
     
     try:
         page = int(request.GET['page'])

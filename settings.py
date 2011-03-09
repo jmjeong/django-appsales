@@ -96,15 +96,26 @@ LOGIN_URL = '/login'
 
 # Local settings
 ##############################
-# iTunes Store AppStore ID
-APPSTORE_ID = ''
-# iTunes Store AppStore PW
-APPSTORE_PW = ''
 
 # prefix for downloaded text file
 DAILY_SALES_PREFIX = "S_D_"
-# Directory where sales data is stored
-DATA_DIR = os.path.join(os.path.dirname(__file__), 'sales-rawdata')
+
+ACCOUNT_INFO = [
+    {                                                # account 2
+        'APPSTORE_ID' : '',                          # iTunes Store AppStore ID
+        'APPSTORE_PW' : '',                          # iTunes Store AppStore PW
+      
+        # Directory where sales data is stored
+        'DATA_DIR' : os.path.join(os.path.dirname(__file__), 'app1-sales-rawdata')
+        },
+    # {                                   # account 2
+    #     'APPSTORE_ID' : '',             # iTunes Store AppStore ID
+    #     'APPSTORE_PW' : '',             # iTunes Store AppStore PW
+      
+    #     # Directory where sales data is stored
+    #     'DATA_DIR' : os.path.join(os.path.dirname(__file__), 'app2-sales-rawdata')
+    #     },
+    ]
 
 PAGINATION_DEFAULT_WINDOW = 3
 ##############################
@@ -126,9 +137,11 @@ INSTALLED_APPS = (
     'django.contrib.humanize',
     'pagination',                       # Requires django-pagination
     'appsales.sales',
+    'south',
     
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )
+

@@ -432,9 +432,12 @@ def downloadFile(options):
                 if options.verbose == True:
                     print 'Unzipping archive file: ', filename
                 #Use GzipFile to de-gzip the data
-                ioBuffer = StringIO.StringIO( filebuffer )
-                gzipIO = gzip.GzipFile( 'rb', fileobj=ioBuffer )
-                filebuffer = gzipIO.read()
+                try:
+                    ioBuffer = StringIO.StringIO( filebuffer )
+                    gzipIO = gzip.GzipFile( 'rb', fileobj=ioBuffer )
+                    filebuffer = gzipIO.read()
+                except IOError:
+                    continue            # if error, skip the next data
 
             filename = os.path.join(options.outputDirectory, filename)
             if options.unzipFile == True and filename[-3:] == '.gz': #Chop off .gz extension if not needed

@@ -19,8 +19,10 @@ class App(models.Model):
         return self.name
 
 class Date(models.Model):
-    date = models.DateField(unique=True)
+    account = models.CharField(max_length=256)
+    date = models.DateField()
     populated = models.BooleanField()
+    
     created = models.DateTimeField(auto_now=True)
 
     def __unicode__(self):

@@ -16,12 +16,14 @@ class Job(BaseJob):
 
         # download daily report
         options = utils.appdailysales.ReportOptions()
-    
-        options.appleId = APPSTORE_ID
-        options.password = APPSTORE_PW
-        options.outputDirectory = DATA_DIR
         options.unzipFile = True
         options.verbose = False
 
-        filenames = utils.appdailysales.downloadFile(options)
-        print 'Report file downloaded: \n%s' % filenames
+        for i in ACCOUNT_INFO:
+            options.appleId = i['APPSTORE_ID']
+            options.password = i['APPSTORE_PW']
+            options.outputDirectory = i['DATA_DIR']
+
+            filenames = utils.appdailysales.downloadFile(options)
+            
+            print 'Report file downloaded: \n%s' % filenames

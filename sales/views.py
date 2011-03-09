@@ -29,7 +29,7 @@ icon_base_url = "http://images.appshopper.com/icons/%s/%s.png"
 @login_required
 def main_page(request, sort):
 
-    dateSet = Date.objects.all().order_by('-date')
+    dateSet = Date.objects.all().order_by('-date').distinct()
     
     if not sort:
         sort = 'name'

@@ -16,7 +16,7 @@ class SalesAdmin(admin.ModelAdmin):
     date_hierarchy = 'date'
     
 class DateAdmin(admin.ModelAdmin):
-    list_display = ('__unicode__', 'populated', 'created')
+    list_display = ('__unicode__', 'account', 'populated', 'created')
     list_filter = ('date',)
     search_filters = ('date',)
     ordering = ('-date',)
