@@ -19,11 +19,12 @@ DB에 넣어서 여러 view로 sales report를 보기 위한 프로그램입니�
 - django-pagination
 
 - pyofc2 (for chart)
+- south (for schema migration)
 
 Python package가 인스톨되어 있으면 
 =easy_install= 명령을 이용하여 시스템에 필요 package를 인스톨할 수 있습니다.
 
-: sudo easy_install django django-extensions django-pagination pyofc2
+: sudo easy_install django django-extensions django-pagination pyofc2 south
 
 *** Downloads
 
@@ -39,11 +40,22 @@ Python package가 인스톨되어 있으면
 =APPSTORE_PW= 항목을 설정합니다.
 
 : # Local settings
-: ##############################
-: # iTunes Store AppStore ID
-: APPSTORE_ID = ''
-: # iTunes Store AppStore PW
-: APPSTORE_PW = ''
+: ACCOUNT_INFO = [
+:     {                                                # account 1
+:         'APPSTORE_ID' : '',                          # iTunes Store AppStore ID
+:         'APPSTORE_PW' : '',                          # iTunes Store AppStore PW
+      
+:         # Directory where sales data is stored
+:         'DATA_DIR' : os.path.join(os.path.dirname(__file__), 'app1-sales-rawdata')
+:         },
+:     # {                                   # account 2
+:     #     'APPSTORE_ID' : '',             # iTunes Store AppStore ID
+:     #     'APPSTORE_PW' : '',             # iTunes Store AppStore PW
+      
+:     #     # Directory where sales data is stored
+:     #     'DATA_DIR' : os.path.join(os.path.dirname(__file__), 'app2-sales-rawdata')
+:     #     },
+:     ]
 
 **** 기본설치 
 
@@ -85,6 +97,8 @@ Python package가 인스톨되어 있으면
 : Installing json fixture 'initial_data' from absolute path.
 : Installed 245 object(s) from 1 fixture(s)
 : jmjeong-ui-MacBook-Pro:appsales jmjeong$ 
+
+: jmjeong-ui-MacBook-Pro:appsales jmjeong$ ./manage.py migrate 
 
 **** 서버구동
 
