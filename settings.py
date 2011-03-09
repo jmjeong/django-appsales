@@ -101,7 +101,7 @@ LOGIN_URL = '/login'
 DAILY_SALES_PREFIX = "S_D_"
 
 ACCOUNT_INFO = [
-    {                                                # account 2
+    {                                                # account 1
         'APPSTORE_ID' : '',                          # iTunes Store AppStore ID
         'APPSTORE_PW' : '',                          # iTunes Store AppStore PW
       
