@@ -29,7 +29,7 @@ icon_base_url = "http://images.appshopper.com/icons/%s/%s.png"
 @login_required
 def main_page(request, sort):
 
-    dateSet = Date.objects.all().order_by('-date').distinct()
+    dateSet = Date.objects.values('date').order_by('-date').distinct()
     
     if not sort:
         sort = 'name'
@@ -57,7 +57,7 @@ def main_page(request, sort):
         if a.appleid:
             result['icon'] =  icon_base_url % (a.appleid[:3], a.appleid[3:])
         
-        ss = Sales.objects.filter(app=a, date=date.date).values('category').annotate(Sum('units'))
+        ss = Sales.objects.filter(app=a, date=date['date']).values('category').annotate(Sum('units'))
         for s in ss:
             result[s['category']] = s['units__sum']
         resultSet.append(result)
@@ -70,9 +70,9 @@ def main_page(request, sort):
     
     if resultSet:
         if sort == 'name':
-            cs = Sales.objects.filter(date=date.date).values('country').annotate(Sum('units')).order_by('-units__sum')[:len(apps)]
+            cs = Sales.objects.filter(date=date['date']).values('country').annotate(Sum('units')).order_by('-units__sum')[:len(apps)]
         else:
-            cs = Sales.objects.filter(date=date.date, category=sort).values('country').annotate(Sum('units')).order_by('-units__sum')[:len(apps)]
+            cs = Sales.objects.filter(date=date['date'], category=sort).values('country').annotate(Sum('units')).order_by('-units__sum')[:len(apps)]
             
         # Convert country pk into country name
         countrySet = map(
@@ -80,7 +80,7 @@ def main_page(request, sort):
                        'code':Country.objects.get(pk=k['country']).code.lower(),
                        'units__sum': k['units__sum']},
             cs)
-        dateStr = date.date.strftime('%Y/%m/%d %a')
+        dateStr = date['date'].strftime('%Y/%m/%d %a')
     else:
         dateStr = None
 
