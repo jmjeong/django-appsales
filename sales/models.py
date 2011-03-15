@@ -109,3 +109,36 @@ class Sales(models.Model):
     def __unicode__(self):
         return self.app.name + "(" + self.date.strftime('%m/%d') + ")"
     
+class Admob(models.Model):
+    app = models.ForeignKey(App)
+    date = models.DateField()
+
+    requests = models.IntegerField()
+    overall_requests = models.IntegerField()
+    housead_requests = models.IntegerField()
+    interstitial_requests = models.IntegerField()
+    impressions = models.IntegerField()
+    cpc_impressions = models.IntegerField()
+    cpm_impressions = models.IntegerField()
+    exchange_impressions = models.IntegerField()
+    housead_impressions = models.IntegerField()
+    interstitial_impressions = models.IntegerField()
+    fill_rate = models.FloatField()
+    housead_fill_rate = models.FloatField()
+    overall_fill_rate = models.FloatField()
+    clicks = models.IntegerField()
+    housead_clicks = models.IntegerField()
+    ctr = models.FloatField()
+    housead_ctr = models.FloatField()
+    ecpm = models.FloatField()
+    revenue = models.FloatField()
+    cpc_revenue = models.FloatField()
+    cpm_revenue = models.FloatField()
+    exchange_downloads = models.IntegerField()
+
+    # def __unicode__(self):
+    #     return self.date.strftime('%Y/%m/%d')
+
+    def __unicode__(self):
+        return self.app.name + " (" + self.date.strftime('%m/%d') + ")"
+    

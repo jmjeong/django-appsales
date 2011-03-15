@@ -19,7 +19,7 @@ from django.shortcuts import render_to_response
 from django.contrib.auth import logout
 from django.db.models import Avg, Sum
 
-from sales.models import App, Date, Country, Review, Sales
+from sales.models import App, Date, Country, Review, Sales, Admob
 
 import datetime
 from itertools import groupby
@@ -58,8 +58,16 @@ def main_page(request, sort):
             result['icon'] =  icon_base_url % (a.appleid[:3], a.appleid[3:])
         
         ss = Sales.objects.filter(app=a, date=date['date']).values('category').annotate(Sum('units'))
+        
+        admob = Admob.objects.filter(app=a, date=date['date']).values('revenue')
+        if admob:
+            result['AD'] = int(admob[0]['revenue']*10 + 0.5) / 10.0
+            # result['AD'] = admob[0]['revenue']
+            
         for s in ss:
             result[s['category']] = s['units__sum']
+
+            
         resultSet.append(result)
 
     # Sort resultSet by Sort category
@@ -162,6 +170,10 @@ def app_page(request, appid, sort, json):
         for f in fs:
             result[f['category']] = f['units__sum']
 
+        admob = Admob.objects.filter(app=appid, date=date).values('revenue')
+        if admob:
+            result['AD'] = int(admob[0]['revenue']*10 + 0.5) / 10.0
+
         resultSet.append(result)
 
     # Sort resultSet by category
@@ -222,6 +234,8 @@ def total_page(request, sort):
         sort = 'appname'
 
     sales = Sales.objects.values('app', 'category').annotate(Sum('units'))
+    admob = Admob.objects.values('app').annotate(Sum('revenue'))
+    
     resultSet = []
     
     for appid, fs in groupby(sorted(sales, key=lambda r:r['app'], reverse=True),
@@ -236,6 +250,10 @@ def total_page(request, sort):
         for f in fs:
             result[f['category']] = f['units__sum']
 
+        for a in admob:
+            if a['app'] == appid:
+                result['AD'] = int(a['revenue__sum']*10+0.5) / 10.0
+
         resultSet.append(result)
 
     # Sort resultSet by category
@@ -246,7 +264,7 @@ def total_page(request, sort):
 
     var = RequestContext(request, {
         'resultSet' : resultSet,
-        'summary':summary,
+        'summary': summary,
         })
     return render_to_response('total_page.html', var)
 
@@ -339,5 +357,6 @@ def generate_summary(resultSet):
     summary['UP'] = sum([f['UP'] for f in resultSet if f.has_key('UP')])
     summary['PA'] = sum([f['PA'] for f in resultSet if f.has_key('PA')])
     summary['IA'] = sum([f['IA'] for f in resultSet if f.has_key('IA')])
+    summary['AD'] = sum([f['AD'] for f in resultSet if f.has_key('AD')])
     
     return summary
