@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
+#  Python binding for Admob API 
+#
 # Copyright 2011 Jaemok Jeong(jmjeong@gmail.com)
 #
 # [2011/03/14]
@@ -100,9 +102,9 @@ class AdmobApi(object):
             raise AdmobErrorException
 
 if __name__ == '__main__':
-    client_key = ''                     # client key
-    email = ''                          # email id
-    passwd = ''                         # pw
+    client_key = ''                     # You can create client key at http://www.admob.com/api
+    email = ''                          # ID
+    passwd = ''                         # Passwd
 
     admob = AdmobApi(client_key)
     token = admob.login(email, passwd)
@@ -114,8 +116,10 @@ if __name__ == '__main__':
 
     result = admob.search(token)
     for i in result:
-        print admob.stats(token, id=i['id'],
-                    start_date=start_date.strftime('%Y-%m-%d'),
-                    end_date=end_date.strftime('%Y-%m-%d'))
-
-    pass
+        print "== ", i['name'], " =="
+        data =  admob.stats(token, id=i['id'],
+                          start_date=start_date.strftime('%Y-%m-%d'),
+                          end_date=end_date.strftime('%Y-%m-%d'))
+        for j in data:
+            if j['revenue'] != 0:
+                print j['date'], ":", j['revenue']
