@@ -2,7 +2,7 @@
 
 import os                           
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -101,21 +101,29 @@ LOGIN_URL = '/login'
 DAILY_SALES_PREFIX = "S_D_"
 
 ACCOUNT_INFO = [
-    {                                                # account 1
-        'APPSTORE_ID' : '',                          # iTunes Store AppStore ID
-        'APPSTORE_PW' : '',                          # iTunes Store AppStore PW
+    {                                   # account 1
+        'APPSTORE_ID' : '',             # iTunes Store AppStore ID
+        'APPSTORE_PW' : '',             # iTunes Store AppStore PW
       
         # Directory where sales data is stored
         'DATA_DIR' : os.path.join(os.path.dirname(__file__), 'app1-sales-rawdata')
         },
-    # {                                   # account 2
-    #     'APPSTORE_ID' : '',             # iTunes Store AppStore ID
-    #     'APPSTORE_PW' : '',             # iTunes Store AppStore PW
+    # {                                 # account 2
+    #     'APPSTORE_ID' : '',           # iTunes Store AppStore ID
+    #     'APPSTORE_PW' : '',           # iTunes Store AppStore PW
       
     #     # Directory where sales data is stored
     #     'DATA_DIR' : os.path.join(os.path.dirname(__file__), 'app2-sales-rawdata')
     #     },
     ]
+
+# for admob integration
+#
+ADMOB_INFO = {
+    'client_key' : '',                  # API key
+    'email' : '',                       # id
+    'passwd' : '',                      # passwd
+    }
 
 PAGINATION_DEFAULT_WINDOW = 3
 ##############################
