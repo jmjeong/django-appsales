@@ -109,8 +109,8 @@ if __name__ == '__main__':
 
     today = datetime.datetime.now()
     # start_date = datetime.date(2009,1,1)
-    start_date = today + datetime.timedelta(days=-1)
-    end_date = today + datetime.timedelta(days=10)
+    start_date = today + datetime.timedelta(days=-7)
+    end_date = today + datetime.timedelta(days=1)
 
     result = admob.search(token)
     for i in result:

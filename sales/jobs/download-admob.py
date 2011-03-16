@@ -25,8 +25,8 @@ class Job(BaseJob):
 
         today = datetime.datetime.now()
         # start_date = datetime.date(2009,1,1)
-        start_date = today + datetime.timedelta(days=-7)
-        end_date = today + datetime.timedelta(days=1)
+        start_date = today + datetime.timedelta(days=-8)
+        end_date = today + datetime.timedelta(days=0)
 
         result = admobapi.search(token)
         for i in result:
@@ -42,41 +42,41 @@ class Job(BaseJob):
                                end_date=end_date.strftime('%Y-%m-%d'))
 
             for j in data:
+                # Update admob data even if it exists, because it is updated in realtime
+                #
                 try:
-                    Admob.objects.get(app = app_id, date=j['date'])
+                    admob = Admob.objects.get(app = app_id, date=j['date'])
                 except Admob.DoesNotExist:
-
                     if j['requests'] == 0: continue
-                    
-                    print "process", j
+                    print j
                     
                     admob = Admob()
                     admob.app = app_id
                     admob.date = j['date']
 
-                    admob.requests = j['requests']
-                    admob.overall_requests = j['overall_requests']
-                    admob.housead_requests = j['housead_requests']
-                    admob.interstitial_requests = j['interstitial_requests']
-                    admob.impressions = j['impressions']
-                    admob.cpc_impressions = j['cpc_impressions']
-                    admob.cpm_impressions = j['cpm_impressions']
-                    admob.exchange_impressions = j['exchange_impressions']
-                    admob.housead_impressions = j['housead_impressions']
-                    admob.interstitial_impressions = j['interstitial_impressions']
-                    admob.fill_rate = j['fill_rate']
-                    admob.housead_fill_rate = j['housead_fill_rate']
-                    admob.overall_fill_rate = j['overall_fill_rate']
-                    admob.clicks = j['clicks']
-                    admob.housead_clicks = j['housead_clicks']
-                    admob.ctr = j['ctr']
-                    admob.housead_ctr = j['housead_ctr']
-                    admob.ecpm = j['ecpm']
-                    admob.revenue = j['revenue']
-                    admob.cpc_revenue = j['cpc_revenue']
-                    admob.cpm_revenue = j['cpm_revenue']
-                    admob.exchange_downloads = j['exchange_downloads']
+                admob.requests = j['requests']
+                admob.overall_requests = j['overall_requests']
+                admob.housead_requests = j['housead_requests']
+                admob.interstitial_requests = j['interstitial_requests']
+                admob.impressions = j['impressions']
+                admob.cpc_impressions = j['cpc_impressions']
+                admob.cpm_impressions = j['cpm_impressions']
+                admob.exchange_impressions = j['exchange_impressions']
+                admob.housead_impressions = j['housead_impressions']
+                admob.interstitial_impressions = j['interstitial_impressions']
+                admob.fill_rate = j['fill_rate']
+                admob.housead_fill_rate = j['housead_fill_rate']
+                admob.overall_fill_rate = j['overall_fill_rate']
+                admob.clicks = j['clicks']
+                admob.housead_clicks = j['housead_clicks']
+                admob.ctr = j['ctr']
+                admob.housead_ctr = j['housead_ctr']
+                admob.ecpm = j['ecpm']
+                admob.revenue = j['revenue']
+                admob.cpc_revenue = j['cpc_revenue']
+                admob.cpm_revenue = j['cpm_revenue']
+                admob.exchange_downloads = j['exchange_downloads']
 
-                    # print admob
-                    admob.save()
+                # print admob
+                admob.save()
                     
