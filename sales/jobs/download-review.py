@@ -49,12 +49,6 @@ class download_report(Thread):
         # output
         self.reviews = []
 
-    def __read_html(self, opener, url):
-        request = urllib2.Request(url, None)
-        urlHandle = opener.open(request)
-        html = urlHandle.read()
-        return html
-
     def __extract_review(self, content):
         reviews = []
 
@@ -117,8 +111,7 @@ class download_report(Thread):
         urlBase = "http://ax.phobos.apple.com.edgesuite.net/WebObjects/MZStore.woa/wa/viewContentsUserReviews?id=%s&&pageNumber=%d&sortOrdering=4&type=Purple+Software"
 
         opener = urllib2.build_opener()
-        opener.addheaders = [('user-agent', 'iTunes/4.2 (Macintosh; U; PPC Mac OS X 10.2)'),]
-        opener.addheaders = [('X-Apple-Store-Front', '%s-1' % self.countrycode),]
+        opener.addheaders = [('User-agent', 'iTunes/10.2.1 (Macintosh; Intel Mac OS X 10.6.7) AppleWebKit/533.20.25'),('X-Apple-Store-Front', '%s-1' % self.countrycode)]
 
         count = 0
         
@@ -127,7 +120,7 @@ class download_report(Thread):
 
             request = urllib2.Request(urlWebsite)
             urlHandle = opener.open(request)
-            content = self.__read_html(opener, urlWebsite)
+            content = urlHandle.read()
 
             reviews = self.__extract_review(content)
 
