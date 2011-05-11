@@ -23,6 +23,9 @@ AppSales
 			<td class="top-list-col"><a href="/total/s/PA/">Paid</a></td>
 			<td class="top-list-col"><a href="/total/s/IA/">InApp</a></td>
 			<td class="top-list-col"><a href="/total/s/UP/">Updates</a></td>
+			{% if summary.AD %}
+			<td class="top-list-col"><a href="/total/s/AD/">Admob</a></td>
+			{% endif %}
 		  </tr>
 		  {% for f in resultSet %}
 		  <tr class="{% cycle 'data_odd' 'data_even' %}">
@@ -32,6 +35,9 @@ AppSales
 			<td class="top-list-col">{{ f.PA|default:"-"|intcomma }}</td>
 			<td class="top-list-col">{{ f.IA|default:"-"|intcomma }}</td>
 			<td class="top-list-col">{{ f.UP|default:"-"|intcomma }}</td>
+			{% if summary.AD %}
+			<td class="top-list-col">{{ f.AD|default:"-"|intcomma }}</td>
+			{% endif %}
 		  </tr>
 		  {% endfor %}
 		  {% if summary %}
@@ -41,6 +47,9 @@ AppSales
 			<td class="top-list-col">{{ summary.PA|intcomma }}</td>
 			<td class="top-list-col">{{ summary.IA|intcomma }}</td>
 			<td class="top-list-col">{{ summary.UP|intcomma }}</td>
+			{% if summary.AD %}
+			<td class="top-list-col">{{ summary.AD|intcomma }}</td>
+			{% endif %}
 		  </tr>
 		  {% endif %}
 		</tbody>

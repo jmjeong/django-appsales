@@ -26,6 +26,10 @@ AppSales
 			<td class="top-list-col"><a href="/app/{{ appid }}/s/PA/?page={{ page }}">Paid</a></td>
 			<td class="top-list-col"><a href="/app/{{ appid }}/s/IA/?page={{ page }}">InApp</a></td>
 			<td class="top-list-col"><a href="/app/{{ appid }}/s/UP/?page={{ page }}">Updates</a></td>
+			{% if summary.AD %}
+			<td class="top-list-col"><a href="/app/{{ appid }}/s/AD/?page={{ page }}">Admob</a></td>
+			{% endif %}
+			
 		  </tr>
 		  {% for f in resultSet %}
 		  <tr class="{% cycle 'data_odd' 'data_even' %}">
@@ -34,6 +38,9 @@ AppSales
 			<td class="top-list-col">{{ f.PA|default:"-"|intcomma }}</td>
 			<td class="top-list-col">{{ f.IA|default:"-"|intcomma }}</td>
 			<td class="top-list-col">{{ f.UP|default:"-"|intcomma }}</td>
+			{% if summary.AD %}
+			<td class="top-list-col">{{ f.AD|default:"-"|intcomma }}</td>
+			{% endif %}
 		  </tr>
 		  {% endfor %}
 		  {% if subsummary %}
@@ -43,6 +50,10 @@ AppSales
 			<td class="top-list-col">{{ subsummary.PA|intcomma }}</td>
 			<td class="top-list-col">{{ subsummary.IA|intcomma }}</td>
 			<td class="top-list-col">{{ subsummary.UP|intcomma }}</td>
+			{% if summary.AD %}
+			<td class="top-list-col">{{ subsummary.AD|intcomma }}</td>
+			{% endif %}
+			
 		  </tr>
 		  {% endif %}
 		  {% if summary %}
@@ -52,6 +63,9 @@ AppSales
 			<td class="top-list-col">{{ summary.PA|intcomma }}</td>
 			<td class="top-list-col">{{ summary.IA|intcomma }}</td>
 			<td class="top-list-col">{{ summary.UP|intcomma }}</td>
+			{% if summary.AD %}
+			<td class="top-list-col">{{ summary.AD|intcomma }}</td>
+			{% endif %}
 		  </tr>
 		  {% endif %}
 		</tbody>

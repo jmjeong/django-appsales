@@ -34,12 +34,31 @@ You can install all of above program using =easy install=.
 
 - Edit =settings.py= file
 
-: # Local settings
-: ##############################
-: # iTunes Store AppStore ID
-: APPSTORE_ID = ''
-: # iTunes Store AppStore PW
-: APPSTORE_PW = ''
+: ACCOUNT_INFO = [
+:     {                                   # account 1
+:         'APPSTORE_ID' : '',             # iTunes Store AppStore ID
+:         'APPSTORE_PW' : '',             # iTunes Store AppStore PW
+:       
+:         # Directory where sales data is stored
+:         'DATA_DIR' : os.path.join(os.path.dirname(__file__), 'app1-sales-rawdata')
+:         },
+:     # {                                 # account 2
+:     #     'APPSTORE_ID' : '',           # iTunes Store AppStore ID
+:     #     'APPSTORE_PW' : '',           # iTunes Store AppStore PW
+:       
+:     #     # Directory where sales data is stored
+:     #     'DATA_DIR' : os.path.join(os.path.dirname(__file__), 'app2-sales-rawdata')
+:     #     },
+:     ]
+: 
+: # for admob integration
+: #
+: ADMOB_INFO = {
+:     'client_key' : '',                  # API key
+:     'email' : '',                       # id
+:     'passwd' : '',                      # passwd
+:     }
+: 
 
 - =./manage.py syncdb=
 - =./manage.py migrate=
@@ -58,10 +77,18 @@ You can set admin account during syncdb process.
 
 For deploying your site, consults [[http://docs.djangoproject.com/en/dev/howto/deployment/][Django deployment]] document.
 
+*** Upgrade
+
+=django-appsales= use [[http://south.aeracode.org/][South]] package for upgrading from the previous version.
+
+- =./manage.py migrate --list=
+- =./manage.py migrate --all=
+
 ** Download and Populate daily sales and reviews 
 
 - =./manage.py runjob download= 
 - =./manage.py runjob populate=
+- =./manage.py runjob download-admob=
 
 - =./manage.py runjob download-review=
 
