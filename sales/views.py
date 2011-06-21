@@ -1,4 +1,3 @@
-q
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
@@ -361,4 +360,3 @@ def generate_summary(resultSet):
     summary['AD'] = sum([f['AD'] for f in resultSet if f.has_key('AD')])
     
     return summary
-j
