@@ -1,3 +1,4 @@
+q
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
@@ -20,6 +21,7 @@ from django.contrib.auth import logout
 from django.db.models import Avg, Sum
 
 from sales.models import App, Date, Country, Review, Sales, Admob
+from pyofc2  import *
 
 import datetime
 from itertools import groupby
@@ -106,7 +108,6 @@ def main_page(request, sort):
 def chart_data(appName, sort, dataSet, subsummary):
     """Generate Chart data"""
     
-    from pyofc2  import *
     
     dataSet = list(dataSet)
     
@@ -360,3 +361,4 @@ def generate_summary(resultSet):
     summary['AD'] = sum([f['AD'] for f in resultSet if f.has_key('AD')])
     
     return summary
+j
