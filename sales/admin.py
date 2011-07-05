@@ -28,11 +28,17 @@ class DateAdmin(admin.ModelAdmin):
     ordering = ('-date',)
     date_hierarchy = 'date'
 
+
 class ReviewAdmin(admin.ModelAdmin):
     list_display = ('app', 'country', 'stars',  'ignore', 'reviewer', 'version','title', 'content')
     ordering = ('-version', '-date', '-ignore')
     list_filter = ('app', )
+    actions = [mark_ignore]
     
+    def mark_ignore(self, request, queryset):
+        queryset.update(ignore=True)
+    mark_ignore.short_description = "Mark selected reviews as ignored"
+
 
 admin.site.register(Sales, SalesAdmin)
 admin.site.register(Review, ReviewAdmin)
