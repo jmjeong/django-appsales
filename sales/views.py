@@ -233,7 +233,8 @@ def total_page(request, sort):
     if not sort:
         sort = 'appname'
 
-    sales = Sales.objects.values('app', 'category').annotate(Sum('units'))
+    sales = Sales.objects.filter(app__ignore=False).values('app', 'category').annotate(Sum('units'))
+    
     admob = Admob.objects.values('app').annotate(Sum('revenue'))
     
     resultSet = []
