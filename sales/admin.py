@@ -31,7 +31,7 @@ class DateAdmin(admin.ModelAdmin):
 
 class ReviewAdmin(admin.ModelAdmin):
     list_display = ('app', 'country', 'stars',  'ignore', 'reviewer', 'version','title', 'content')
-    ordering = ('-version', '-date', '-ignore')
+    ordering = ('-ignore', '-version','-date',)
     list_filter = ('app', )
     actions = ['mark_ignore']
     
