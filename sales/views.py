@@ -334,7 +334,7 @@ def review_page(request, appid):
         else:
             avg_star = 0
         result['avg'] = avg_star
-        result['recent'] = Review.objects.filter(app = a, date__gt = oneweeksago).count()
+        result['recent'] = Review.objects.filter(app=a,ignore=False,date__gt=oneweeksago).count()
         
         resultSet.append(result)
 
