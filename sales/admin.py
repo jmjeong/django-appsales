@@ -29,8 +29,8 @@ class DateAdmin(admin.ModelAdmin):
     date_hierarchy = 'date'
 
 class ReviewAdmin(admin.ModelAdmin):
-    list_display = ('app', 'country', 'stars',  'reviewer', 'version','title', 'content')
-    ordering = ('-version', '-date')
+    list_display = ('app', 'country', 'stars',  'ignore', 'reviewer', 'version','title', 'content')
+    ordering = ('-version', '-date', '-ignore')
     list_filter = ('app', )
     
 

@@ -49,7 +49,7 @@ def main_page(request, sort):
     resultSet = []
     countrySet = []
 
-    apps = App.objects.all()
+    apps = App.objects.filter(ignore=False)
     
     for a in apps:
         result = {}
@@ -281,8 +281,8 @@ def review_page_detail(request, appid):
     else:
         icon = None
     
-    reviews = Review.objects.filter(app=appid).order_by('-version', '-date')
-    versions = Review.objects.filter(app=appid).values('version').distinct().order_by('-version')
+    reviews = Review.objects.filter(app=appid,ignore=False).order_by('-version', '-date')
+    versions = Review.objects.filter(app=appid,ignore=False).values('version').distinct().order_by('-version')
     if versions:
         latest_version = versions[0]['version']
     else:
@@ -310,7 +310,8 @@ def review_page(request, appid):
     countrys = Review.objects.values('country__code').distinct()
     oneweeksago = datetime.datetime.now() + datetime.timedelta(days=-7)
     
-    apps = App.objects.all()
+    apps = App.objects.filter(ignore=False)
+    
     for a in apps:
 
         versions = Review.objects.filter(app=a).values('version').distinct().order_by('-version')
@@ -324,9 +325,10 @@ def review_page(request, appid):
         result['appid'] = a.id
         if a.appleid:
             result['icon'] = icon_base_url % (a.appleid[:3], a.appleid[3:])
-        result['total'] = Review.objects.filter(app = a).count()
-        result['current'] = Review.objects.filter(app = a, version=latest).count()
-        avg_star = Review.objects.filter(app = a, version=latest).aggregate(Avg('stars'))
+            
+        result['total'] = Review.objects.filter(app = a,ignore=False).count()
+        result['current'] = Review.objects.filter(app = a,version=latest,ignore=False).count()
+        avg_star = Review.objects.filter(app = a, version=latest,ignore=False).aggregate(Avg('stars'))
         if avg_star['stars__avg']:
             avg_star = int(float(avg_star['stars__avg'])+0.5)
         else:

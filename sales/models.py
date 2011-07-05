@@ -14,6 +14,7 @@ class App(models.Model):
     appleid = models.CharField(max_length=18)
     sku = models.CharField(max_length=100)
     name = models.CharField(max_length=255)
+    ignore = models.BooleanField()
 
     def __unicode__(self):
         return self.name
@@ -46,6 +47,7 @@ class Review(models.Model):
     version = models.CharField(max_length=100)
     date = models.DateField()       
     content = models.TextField()
+    ignore = models.BooleanField()
     
     created = models.DateTimeField(auto_now=True)
 
