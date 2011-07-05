@@ -178,6 +178,7 @@ class Job(BaseJob):
                 entry.version = r['version']
                 entry.date = r['date']
                 entry.content = r['content']
+                entry.ignore = False
 
                 print "add  ... [%s]" % r['title']
 
