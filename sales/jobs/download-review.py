@@ -91,7 +91,7 @@ class download_report(Thread):
 
     def __check_exists(self, r):
         try:
-            Review.objects.get(app=self.app, country=self.country, title=r['title'], stars=r['stars'],
+            Review.objects.filter(app=self.app, country=self.country, title=r['title'], stars=r['stars'],
                                reviewer = r['name'], version = r['version'])
             return True
         except Review.DoesNotExist: 

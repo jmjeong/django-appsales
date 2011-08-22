@@ -23,7 +23,16 @@ class Job(BaseJob):
             options.appleId = i['APPSTORE_ID']
             options.password = i['APPSTORE_PW']
             options.outputDirectory = i['DATA_DIR']
+            options.unzipFile = True
+            options.daysToDownload = 14
+            options.outputFormat = 'S_D_%d-%m-%Y.txt'
+            options.overWriteFiles = False
+            # options.verbose = True
 
-            filenames = utils.appdailysales.downloadFile(options)
+            filenames = [] 
+            try:
+                filenames = utils.appdailysales.downloadFile(options)
+            except utils.appdailysales.ITCException:
+                pass
             
             print 'Report file downloaded: \n%s' % filenames
