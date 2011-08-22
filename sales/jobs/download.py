@@ -25,7 +25,7 @@ class Job(BaseJob):
             options.outputDirectory = i['DATA_DIR']
             options.unzipFile = True
             options.daysToDownload = 14
-            options.outputFormat = 'S_D_%d-%m-%Y.txt'
+            options.outputFormat = 'S_D_%m-%d-%Y.txt'
             options.overWriteFiles = False
             # options.verbose = True
 
