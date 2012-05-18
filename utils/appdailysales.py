@@ -5,7 +5,7 @@
 # iTune Connect Daily Sales Reports Downloader
 # Copyright 2008-2011 Kirby Turner
 #
-# Version 2.9.2
+# Version 2.9.3
 #
 # Latest version and additional information available at:
 #   http://appdailysales.googlecode.com/
@@ -31,6 +31,7 @@
 #   Daniel Dickison
 #   Mike Kasprzak
 #   Shintaro TAKEMURA
+#   aaarrrggh (Paul)
 #
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -351,11 +352,11 @@ def downloadFile(options):
     try:
         match = re.findall('"javax.faces.ViewState" value="(.*?)"', html)
         viewState = match[0]
-        match = re.findall('theForm:j_id_jsp_[0-9]*_38', html)
+        match = re.findall('theForm:j_id_jsp_[0-9]*_51', html)
         dailyName = match[0]
-        ajaxName = re.sub('._38', '_2', dailyName)
-        dateName = re.sub('._38', '_8', dailyName)
-        selectName = re.sub('._38', '_32', dailyName)
+        ajaxName = re.sub('._51', '4_2', dailyName)
+        dateName = re.sub('._51', '4_8', dailyName)
+        selectName = re.sub('._51', '4_30', dailyName)
         if options.debug == True:
             print 'viewState: ', viewState
             print 'dailyName: ', dailyName
@@ -390,7 +391,7 @@ def downloadFile(options):
 
 
     # Click through from the dashboard to the sales page.
-    webFormSalesReportData = urllib.urlencode({'AJAXREQUEST':ajaxName, 'theForm':'theForm', 'theForm:xyz':'notnormal', 'theForm:vendorType':'Y', 'theForm:datePickerSourceSelectElementSales':dateListAvailableDays[0], 'theForm:weekPickerSourceSelectElement':dateListAvailableWeeks[0], 'javax.faces.ViewState':viewState, dailyName:dailyName, 'theForm:optInVar':'A',  'theForm:dateType':'D', 'theForm:optInVarRender':'false', 'theForm:wklyBool':'false'})
+    webFormSalesReportData = urllib.urlencode({'AJAXREQUEST':ajaxName, 'theForm':'theForm', 'theForm:userType':'notnormal', 'theForm:vendorType':'Y', 'theForm:datePickerSourceSelectElementSales':dateListAvailableDays[0], 'theForm:weekPickerSourceSelectElement':dateListAvailableWeeks[0], 'javax.faces.ViewState':viewState, dailyName:dailyName, 'theForm:optInVar':'A',  'theForm:dateType':'D', 'theForm:optInVarRender':'false', 'theForm:wklyBool':'false'})
     html = readHtml(opener, urlSalesReport, webFormSalesReportData, options=options)
     match = re.findall('"javax.faces.ViewState" value="(.*?)"', html)
     viewState = match[0]
@@ -437,13 +438,13 @@ def downloadFile(options):
 
             if options.verbose == True:
                 print 'Downloading report for: ', dateString
-            webFormSalesReportData = urllib.urlencode({'AJAXREQUEST':ajaxName, 'theForm':'theForm', 'theForm:xyz':'notnormal', 'theForm:vendorType':'Y', 'theForm:datePickerSourceSelectElementSales':dateString, 'theForm:datePickerSourceSelectElementSales':dateString, 'theForm:weekPickerSourceSelectElement':dateListAvailableWeeks[0], 'javax.faces.ViewState':viewState, selectName:selectName})
+            webFormSalesReportData = urllib.urlencode({'AJAXREQUEST':ajaxName, 'theForm':'theForm', 'theForm:userType':'notnormal', 'theForm:vendorType':'Y', 'theForm:datePickerSourceSelectElementSales':dateString, 'theForm:datePickerSourceSelectElementSales':dateString, 'theForm:weekPickerSourceSelectElement':dateListAvailableWeeks[0], 'javax.faces.ViewState':viewState, 'theForm:dateType':'D', selectName:selectName})
             html = readHtml(opener, urlSalesReport, webFormSalesReportData)
             match = re.findall('"javax.faces.ViewState" value="(.*?)"', html)
             viewState = match[0]
 
             # And finally...we're ready to download yesterday's sales report.
-            webFormSalesReportData = urllib.urlencode({'theForm':'theForm', 'theForm:xyz':'notnormal', 'theForm:vendorType':'Y', 'theForm:datePickerSourceSelectElementSales':dateString, 'theForm:weekPickerSourceSelectElement':dateListAvailableWeeks[0], 'javax.faces.ViewState':viewState, 'theForm:downloadLabel2':'theForm:downloadLabel2'})
+            webFormSalesReportData = urllib.urlencode({'theForm':'theForm', 'theForm:userType':'notnormal', 'theForm:vendorType':'Y', 'theForm:datePickerSourceSelectElementSales':dateString, 'theForm:weekPickerSourceSelectElement':dateListAvailableWeeks[0], 'javax.faces.ViewState':viewState, 'theForm:downloadLabel2':'theForm:downloadLabel2', 'theForm:dateType':'D', 'theForm:optInVar':'A'})
             request = urllib2.Request(urlSalesReport, webFormSalesReportData)
             urlHandle = opener.open(request)
             try:
