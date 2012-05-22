@@ -14,7 +14,7 @@ DB에 넣어서 여러 view로 sales report를 보기 위한 프로그램입니�
 
 이 프로그램을 구동하기 위해서는 다음과 같은 프로그램이 필요합니다.
 
-- django 1.2.3 
+- django 1.2.3 above
 - django-extensions
 - django-pagination
 
@@ -39,23 +39,33 @@ Python package가 인스톨되어 있으면
 자동화를 위해서 =APPSTORE_ID=와 
 =APPSTORE_PW= 항목을 설정합니다.
 
-: # Local settings
 : ACCOUNT_INFO = [
-:     {                                                # account 1
-:         'APPSTORE_ID' : '',                          # iTunes Store AppStore ID
-:         'APPSTORE_PW' : '',                          # iTunes Store AppStore PW
-      
+:     {                                   # account 1
+:         'VENDOR_ID'   :   ,             # Vendor ID(8x...) the entity which you want to download the report
+:         'APPSTORE_ID' : '',             # iTunes Store AppStore ID
+:         'APPSTORE_PW' : '',             # iTunes Store AppStore PW
+:       
 :         # Directory where sales data is stored
 :         'DATA_DIR' : os.path.join(os.path.dirname(__file__), 'app1-sales-rawdata')
 :         },
-:     # {                                   # account 2
-:     #     'APPSTORE_ID' : '',             # iTunes Store AppStore ID
-:     #     'APPSTORE_PW' : '',             # iTunes Store AppStore PW
-      
+:     # {                                 # account 2
+:     #     'VENDOR_ID'   :   ,           # Vendor ID(8x...) 
+:     #     'APPSTORE_ID' : '',           # iTunes Store AppStore ID
+:     #     'APPSTORE_PW' : '',           # iTunes Store AppStore PW
+:       
 :     #     # Directory where sales data is stored
 :     #     'DATA_DIR' : os.path.join(os.path.dirname(__file__), 'app2-sales-rawdata')
 :     #     },
 :     ]
+: 
+: # for admob integration
+: #
+: ADMOB_INFO = {
+:     'client_key' : '',                  # API key
+:     'email' : '',                       # id
+:     'passwd' : '',                      # passwd
+:     }
+: 
 
 **** 기본설치 
 
@@ -193,4 +203,3 @@ DB에 저장하는 script입니다.  =crontab -e=를 이용하여 system의 cron
 #+docs/mainpage.png http://jmjeong.com/wp-content/uploads/mainpage1.png
 #+docs/mainpage-sort.png http://jmjeong.com/wp-content/uploads/mainpage-sort1.png
 #+docs/app-page.png http://jmjeong.com/wp-content/uploads/app-page1.png
-

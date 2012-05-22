@@ -36,6 +36,7 @@ You can install all of above program using =easy install=.
 
 : ACCOUNT_INFO = [
 :     {                                   # account 1
+:         'VENDOR_ID'   :   ,             # Vendor ID(8x...) the entity which you want to download the report
 :         'APPSTORE_ID' : '',             # iTunes Store AppStore ID
 :         'APPSTORE_PW' : '',             # iTunes Store AppStore PW
 :       
@@ -43,6 +44,7 @@ You can install all of above program using =easy install=.
 :         'DATA_DIR' : os.path.join(os.path.dirname(__file__), 'app1-sales-rawdata')
 :         },
 :     # {                                 # account 2
+:     #     'VENDOR_ID'   :   ,           # Vendor ID(8x...) 
 :     #     'APPSTORE_ID' : '',           # iTunes Store AppStore ID
 :     #     'APPSTORE_PW' : '',           # iTunes Store AppStore PW
 :       

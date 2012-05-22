@@ -15,7 +15,7 @@ EMAIL_HOST = 'localhost'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
         'NAME' : os.path.join(os.path.dirname(__file__), 'sales.sqlite3'), # Or path to database file if using sqlite3.     
                   
         'USER': '',                      # Not used with sqlite3.
@@ -94,21 +94,23 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'appsales.urls'
 LOGIN_URL = '/login'
 
-# Local settings
-##############################
-
 # prefix for downloaded text file
 DAILY_SALES_PREFIX = "S_D_"
+AUTO_INGESTION_PROGRAM = os.path.join(os.path.dirname(__file__), 'utils/Autoingestion.class')
 
+# Local settings
+##############################
 ACCOUNT_INFO = [
-    {                                   # account 1
-        'APPSTORE_ID' : '',             # iTunes Store AppStore ID
-        'APPSTORE_PW' : '',             # iTunes Store AppStore PW
+      {                 # account 1
+        'VENDOR_ID'   : 0,                  # VENDOR ID
+        'APPSTORE_ID' : '',                 # iTunes Store AppStore ID
+        'APPSTORE_PW' : '',                 # iTunes Store AppStore PW
       
         # Directory where sales data is stored
         'DATA_DIR' : os.path.join(os.path.dirname(__file__), 'app1-sales-rawdata')
         },
     # {                                 # account 2
+    #     'VENDOR_ID'   : 0,            # VENDOR ID
     #     'APPSTORE_ID' : '',           # iTunes Store AppStore ID
     #     'APPSTORE_PW' : '',           # iTunes Store AppStore PW
       
@@ -152,4 +154,3 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )
-

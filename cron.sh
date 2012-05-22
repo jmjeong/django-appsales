@@ -1,3 +1,3 @@
-/path/to/appsales/manage.py runjob download
-/path/to/appsales/manage.py runjob populate
-/path/to/appsales/manage.py runjob download-admob
+./manage.py runjob download
+./manage.py runjob populate
+./manage.py runjob download-admob
