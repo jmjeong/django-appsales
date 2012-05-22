@@ -26,6 +26,10 @@ You can install all of above program using =easy install=.
 
 : sudo easy_install django django-extensions django-pagination pyofc2 south
 
+You need java package to download app sales data using AutoIngest.class tool.
+
+: sudo apt-get install openjdk-6-jre-headless
+
 *** Download source code
 
 : git clone git://github.com/jmjeong/django-appsales.git appsales
